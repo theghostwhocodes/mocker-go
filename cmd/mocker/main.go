@@ -25,7 +25,9 @@ func getContent(basePath string, r *http.Request) ([]byte, error) {
 
 func manageError(err error, w http.ResponseWriter) {
 	log.Println(err)
-	fmt.Fprintln(w, err)
+	errorMessage := fmt.Sprintf("{\n\t\"error\": \"%s\"\n}", err)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	fmt.Fprintln(w, errorMessage)
 }
 
 func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
