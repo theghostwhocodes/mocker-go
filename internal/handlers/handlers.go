@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -21,9 +22,13 @@ func getContent(basePath string, r *http.Request) ([]byte, error) {
 	return content, err
 }
 
-func manageError(err error, w http.ResponseWriter) {
-	log.Println(err)
-	errorMessage := fmt.Sprintf("{\n\t\"error\": \"%s\"\n}", err)
+func isValidJSON(content []byte) bool {
+	var result map[string]interface{}
+	return json.Unmarshal(content, &result) == nil
+}
+
+func sendErrorMessage(message string, w http.ResponseWriter) {
+	errorMessage := fmt.Sprintf("{\n\t\"error\": \"%s\"\n}", message)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintln(w, errorMessage)
 }
@@ -38,11 +43,18 @@ func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
 func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		content, err := getContent(basePath, r)
+		isValid := isValidJSON(content)
 
 		if err != nil {
-			manageError(err, w)
-		} else {
-			manageSuccess(w, r, content)
+			sendErrorMessage(err.Error(), w)
+			return
 		}
+
+		if !isValid {
+			sendErrorMessage("The mock file contains invalid JSON", w)
+			return
+		}
+
+		manageSuccess(w, r, content)
 	}
 }
