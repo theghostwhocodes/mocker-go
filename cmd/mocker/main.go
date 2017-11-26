@@ -10,6 +10,8 @@ import (
 	"github.com/theghostwhocodes/mocker-go/internal/handlers"
 )
 
+var version string
+var showVersion bool
 var dataPath string
 var port int
 var host string
@@ -24,6 +26,7 @@ func init() {
 		hostHelpText     = "The host to listen"
 	)
 
+	flag.BoolVar(&showVersion, "version", false, "Mocker version")
 	flag.StringVar(&dataPath, "d", dataPathDefault, dataPathHelpText+" (shorthand)")
 	flag.StringVar(&dataPath, "data", dataPathDefault, dataPathHelpText)
 	flag.IntVar(&port, "p", portDefault, portHelpText+" (shorthand)")
@@ -34,6 +37,11 @@ func init() {
 
 func main() {
 	flag.Parse()
+
+	if showVersion {
+		fmt.Printf("Mocker version %s", version)
+		return
+	}
 
 	basePath, _ := filepath.Abs(dataPath)
 
