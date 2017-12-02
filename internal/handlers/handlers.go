@@ -3,24 +3,11 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"path"
-	"strings"
-)
 
-func getContent(basePath string, r *http.Request) ([]byte, error) {
-	method := r.Method
-	fileName := fmt.Sprintf("%s.%s.json", r.URL.Path[1:], strings.ToUpper(method))
-	content, err := ioutil.ReadFile(
-		path.Join(
-			basePath,
-			fileName,
-		),
-	)
-	return content, err
-}
+	"github.com/theghostwhocodes/mocker-go/internal/contentManagers"
+)
 
 func isValidJSON(content []byte) bool {
 	var result map[string]interface{}
@@ -42,7 +29,7 @@ func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
 // HandlerFactory return a proper handler
 func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		content, err := getContent(basePath, r)
+		content, err := contentManagers.GetContent(basePath, r)
 		isValid := isValidJSON(content)
 
 		if err != nil {
