@@ -1,4 +1,21 @@
 language: go
 go:
   - 1.9
-script: go test github.com/theghostwhocodes/mocker-go/internal/contentManagers
+env:
+  global:
+    - BUILD_GOARCH=amd64
+  matrix:
+    - BUILD_GOOS=linux
+    - BUILD_GOOS=darwin
+    - BUILD_GOOS=windows
+script: if [ $BUILD_GOOS == "linux" ]; then GOARCH=$BUILD_GOARCH GOOS=$BUILD_GOOS go test github.com/theghostwhocodes/mocker-go/internal/contentManagers
+before_deploy:
+  - build -ldflags "-X main.version=${TRAVIS_TAG}" -o build/mocker cmd/mocker/main.go
+  - tar -C build/mocker -cvzf mocker-${TRAVIS_TAG}-${TRAVIS_OS_NAME}.tar.gz .
+deploy:
+  provider: releases
+  api_key: ${GH_TOKEN}
+  file: "mocker-${TRAVIS_TAG}-${BUILD_GOOS}.tar.gz"
+  skip_cleanup: true
+  on:
+    tags: true
