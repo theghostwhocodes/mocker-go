@@ -7,27 +7,13 @@ import (
 	"net/http"
 
 	"github.com/theghostwhocodes/mocker-go/internal/contentManagers"
+	"github.com/theghostwhocodes/mocker-go/internal/validators"
 )
-
-func isValidJSON(content []byte) bool {
-	var result map[string]interface{}
-	return json.Unmarshal(content, &result) == nil
-}
 
 func getMapFromBytes(content []byte) map[string]interface{} {
 	var result map[string]interface{}
 	json.Unmarshal(content, &result)
 	return result
-}
-
-func hasRequest(content map[string]interface{}) bool {
-	_, ok := content["request"]
-	return ok
-}
-
-func hasResponse(content map[string]interface{}) bool {
-	_, ok := content["response"]
-	return ok
 }
 
 func sendErrorMessage(w http.ResponseWriter, message string) {
@@ -46,7 +32,7 @@ func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
 func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		content, err := contentManagers.GetContent(basePath, r)
-		isValid := isValidJSON(content)
+		isValid := validators.IsValidJSON(content)
 
 		if err != nil {
 			sendErrorMessage(w, err.Error())
@@ -59,11 +45,11 @@ func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request
 		}
 
 		jsonMap := getMapFromBytes(content)
-		if !hasRequest(jsonMap) {
+		if !validators.HasRequest(jsonMap) {
 			sendErrorMessage(w, "Oops, probably your mock file doesn't contain 'request' section")
 			return
 		}
-		if !hasResponse(jsonMap) {
+		if !validators.HasResponse(jsonMap) {
 			sendErrorMessage(w, "Oops, probably you mock file doesn't contain 'response' section")
 			return
 		}
