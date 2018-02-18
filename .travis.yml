@@ -10,7 +10,7 @@ env:
     - BUILD_GOOS=windows
 script: if [ "${BUILD_GOOS}" == "linux" ]; then GOARCH=${BUILD_GOARCH} GOOS=${BUILD_GOOS} go test github.com/theghostwhocodes/mocker-go/internal/...; fi;
 before_deploy:
-  - go build -ldflags "-X main.version=${TRAVIS_TAG}" -o build/mocker cmd/mocker/main.go
+  - GOARCH=${BUILD_GOARCH} GOOS=${BUILD_GOOS} go build -ldflags "-X main.version=${TRAVIS_TAG}" -o build/mocker cmd/mocker/main.go
   - tar -C build -cvzf mocker-${TRAVIS_TAG}-${TRAVIS_OS_NAME}.tar.gz .
 deploy:
   provider: releases
