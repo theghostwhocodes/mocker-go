@@ -54,6 +54,10 @@ func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request
 			return
 		}
 
-		manageSuccess(w, r, content)
+		body, err := contentManagers.GetBodyContent(jsonMap)
+		if err != nil {
+			sendErrorMessage(w, err.Error())
+		}
+		manageSuccess(w, r, body)
 	}
 }

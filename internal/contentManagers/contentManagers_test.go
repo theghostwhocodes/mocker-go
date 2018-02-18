@@ -67,3 +67,59 @@ func TestGetAbsoluteFileNameHttpGet(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestGetBodyContentSuccess(t *testing.T) {
+	jsonMap := map[string]interface{}{
+		"request": nil,
+		"response": map[string]interface{}{
+			"body": "This is the response body",
+		},
+	}
+
+	bodyContent, err := contentManagers.GetBodyContent(jsonMap)
+	bodyContentString := string(bodyContent)
+
+	if bodyContentString != "\"This is the response body\"" {
+		t.Fail()
+	}
+
+	if err != nil {
+		t.Fail()
+	}
+}
+
+func TestGetBodyContentResponseNil(t *testing.T) {
+	jsonMap := map[string]interface{}{
+		"request":  nil,
+		"response": map[string]interface{}{},
+	}
+
+	bodyContent, err := contentManagers.GetBodyContent(jsonMap)
+
+	if bodyContent != nil {
+		t.Fail()
+	}
+
+	if err == nil {
+		t.Fail()
+	}
+}
+
+func TestGetBodyContentNoBody(t *testing.T) {
+	jsonMap := map[string]interface{}{
+		"request": nil,
+		"response": map[string]interface{}{
+			"key": "value",
+		},
+	}
+
+	bodyContent, err := contentManagers.GetBodyContent(jsonMap)
+
+	if bodyContent != nil {
+		t.Fail()
+	}
+
+	if err == nil {
+		t.Fail()
+	}
+}
