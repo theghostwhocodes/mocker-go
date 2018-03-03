@@ -55,6 +55,30 @@ func TestGetFileNameHttpDelete(t *testing.T) {
 	}
 }
 
+func TestGetDirNameSimpleDir(t *testing.T) {
+	dirName := contentmanagers.GetDirName("/folder/mock", "GET")
+	expectedDirName := "/folder"
+	if dirName != expectedDirName {
+		t.Fail()
+	}
+}
+
+func TestGetDirNameMultipleDir(t *testing.T) {
+	dirName := contentmanagers.GetDirName("/folder/subfolder/mock", "GET")
+	expectedDirName := "/folder/subfolder"
+	if dirName != expectedDirName {
+		t.Fail()
+	}
+}
+
+func TestGetDirNameRootDir(t *testing.T) {
+	dirName := contentmanagers.GetDirName("/folder", "GET")
+	expectedDirName := ""
+	if dirName != expectedDirName {
+		t.Fail()
+	}
+}
+
 func TestGetAbsoluteFileNameHttpGet(t *testing.T) {
 	fileName := "/folder/mock.GET.json"
 	basePath := "/var/www/"

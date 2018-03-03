@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"path"
 	"strings"
 )
@@ -13,6 +14,14 @@ import (
 // GetFileName return the computed file name for the mock
 func GetFileName(urlPath string, method string) string {
 	return fmt.Sprintf("%s.%s.json", urlPath, strings.ToUpper(method))
+}
+
+// GetDirName return the computed dir name for the mock
+func GetDirName(urlPath string, method string) string {
+	urlPathComponents := strings.Split(urlPath, string(os.PathSeparator))
+	dirComponents := urlPathComponents[:len(urlPathComponents)-1]
+	dirPath := strings.Join(dirComponents, string(os.PathSeparator))
+	return dirPath
 }
 
 // GetAbsoluteFileName return the full mock filename
