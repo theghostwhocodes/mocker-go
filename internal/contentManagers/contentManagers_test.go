@@ -1,14 +1,14 @@
-package contentManagers_test
+package contentmanagers_test
 
 import (
 	"path"
 	"testing"
 
-	"github.com/theghostwhocodes/mocker-go/internal/contentManagers"
+	"github.com/theghostwhocodes/mocker-go/internal/contentmanagers"
 )
 
 func TestGetFileNameHttpGet(t *testing.T) {
-	fileName := contentManagers.GetFileName("/folder/mock", "GET")
+	fileName := contentmanagers.GetFileName("/folder/mock", "GET")
 	expectedFileName := "/folder/mock.GET.json"
 	if fileName != expectedFileName {
 		t.Fail()
@@ -16,7 +16,7 @@ func TestGetFileNameHttpGet(t *testing.T) {
 }
 
 func TestGetFileNameHttpPost(t *testing.T) {
-	fileName := contentManagers.GetFileName("/folder/mock", "POST")
+	fileName := contentmanagers.GetFileName("/folder/mock", "POST")
 	expectedFileName := "/folder/mock.POST.json"
 	if fileName != expectedFileName {
 		t.Fail()
@@ -24,7 +24,7 @@ func TestGetFileNameHttpPost(t *testing.T) {
 }
 
 func TestGetFileNameHttpPut(t *testing.T) {
-	fileName := contentManagers.GetFileName("/folder/mock", "PUT")
+	fileName := contentmanagers.GetFileName("/folder/mock", "PUT")
 	expectedFileName := "/folder/mock.PUT.json"
 	if fileName != expectedFileName {
 		t.Fail()
@@ -32,7 +32,7 @@ func TestGetFileNameHttpPut(t *testing.T) {
 }
 
 func TestGetFileNameHttpPatch(t *testing.T) {
-	fileName := contentManagers.GetFileName("/folder/mock", "PATCH")
+	fileName := contentmanagers.GetFileName("/folder/mock", "PATCH")
 	expectedFileName := "/folder/mock.PATCH.json"
 	if fileName != expectedFileName {
 		t.Fail()
@@ -40,7 +40,7 @@ func TestGetFileNameHttpPatch(t *testing.T) {
 }
 
 func TestGetFileNameHttpOptions(t *testing.T) {
-	fileName := contentManagers.GetFileName("/folder/mock", "OPTIONS")
+	fileName := contentmanagers.GetFileName("/folder/mock", "OPTIONS")
 	expectedFileName := "/folder/mock.OPTIONS.json"
 	if fileName != expectedFileName {
 		t.Fail()
@@ -48,7 +48,7 @@ func TestGetFileNameHttpOptions(t *testing.T) {
 }
 
 func TestGetFileNameHttpDelete(t *testing.T) {
-	fileName := contentManagers.GetFileName("/folder/mock", "DELETE")
+	fileName := contentmanagers.GetFileName("/folder/mock", "DELETE")
 	expectedFileName := "/folder/mock.DELETE.json"
 	if fileName != expectedFileName {
 		t.Fail()
@@ -58,7 +58,7 @@ func TestGetFileNameHttpDelete(t *testing.T) {
 func TestGetAbsoluteFileNameHttpGet(t *testing.T) {
 	fileName := "/folder/mock.GET.json"
 	basePath := "/var/www/"
-	absoluteFileName := contentManagers.GetAbsoluteFileName(basePath, fileName)
+	absoluteFileName := contentmanagers.GetAbsoluteFileName(basePath, fileName)
 	expectedAbsoluteFileName := path.Join(
 		basePath,
 		fileName,
@@ -76,7 +76,7 @@ func TestGetBodyContentSuccess(t *testing.T) {
 		},
 	}
 
-	bodyContent, err := contentManagers.GetBodyContent(jsonMap)
+	bodyContent, err := contentmanagers.GetBodyContent(jsonMap)
 	bodyContentString := string(bodyContent)
 
 	if bodyContentString != "\"This is the response body\"" {
@@ -94,7 +94,7 @@ func TestGetBodyContentResponseNil(t *testing.T) {
 		"response": map[string]interface{}{},
 	}
 
-	bodyContent, err := contentManagers.GetBodyContent(jsonMap)
+	bodyContent, err := contentmanagers.GetBodyContent(jsonMap)
 
 	if bodyContent != nil {
 		t.Fail()
@@ -113,7 +113,7 @@ func TestGetBodyContentNoBody(t *testing.T) {
 		},
 	}
 
-	bodyContent, err := contentManagers.GetBodyContent(jsonMap)
+	bodyContent, err := contentmanagers.GetBodyContent(jsonMap)
 
 	if bodyContent != nil {
 		t.Fail()

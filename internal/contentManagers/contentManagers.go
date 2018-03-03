@@ -1,4 +1,4 @@
-package contentManagers
+package contentmanagers
 
 import (
 	"encoding/json"

@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/theghostwhocodes/mocker-go/internal/contentManagers"
+	"github.com/theghostwhocodes/mocker-go/internal/contentmanagers"
 	"github.com/theghostwhocodes/mocker-go/internal/validators"
 )
 
@@ -31,7 +31,7 @@ func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
 // HandlerFactory return a proper handler
 func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		content, err := contentManagers.GetContent(basePath, r)
+		content, err := contentmanagers.GetContent(basePath, r)
 		isValid := validators.IsValidJSON(content)
 
 		if err != nil {
@@ -54,7 +54,7 @@ func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request
 			return
 		}
 
-		body, err := contentManagers.GetBodyContent(jsonMap)
+		body, err := contentmanagers.GetBodyContent(jsonMap)
 		if err != nil {
 			sendErrorMessage(w, err.Error())
 		}
