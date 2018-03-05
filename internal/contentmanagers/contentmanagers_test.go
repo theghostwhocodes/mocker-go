@@ -79,6 +79,30 @@ func TestGetDirNameRootDir(t *testing.T) {
 	}
 }
 
+func TestGetResourceNameSimpleDir(t *testing.T) {
+	resourceName := contentmanagers.GetResourceName("/folder/mock")
+	expectedResourceName := "mock"
+	if resourceName != expectedResourceName {
+		t.Fail()
+	}
+}
+
+func TestGetResourceNameMultipleDir(t *testing.T) {
+	resourceName := contentmanagers.GetResourceName("/folder/subfolder/mock")
+	expectedResourceName := "mock"
+	if resourceName != expectedResourceName {
+		t.Fail()
+	}
+}
+
+func TestGetResourceNameRootDir(t *testing.T) {
+	resourceName := contentmanagers.GetResourceName("/folder")
+	expectedResourceName := "folder"
+	if resourceName != expectedResourceName {
+		t.Fail()
+	}
+}
+
 func TestGetAbsoluteFileNameHttpGet(t *testing.T) {
 	fileName := "/folder/mock.GET.json"
 	basePath := "/var/www/"
