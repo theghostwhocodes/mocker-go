@@ -17,7 +17,7 @@ func GetFileName(urlPath string, method string) string {
 }
 
 // GetDirName return the computed dir name for the mock
-func GetDirName(urlPath string, method string) string {
+func GetDirName(urlPath string) string {
 	urlPathComponents := strings.Split(urlPath, string(os.PathSeparator))
 	dirComponents := urlPathComponents[:len(urlPathComponents)-1]
 	dirPath := strings.Join(dirComponents, string(os.PathSeparator))

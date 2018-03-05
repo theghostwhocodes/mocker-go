@@ -56,7 +56,7 @@ func TestGetFileNameHttpDelete(t *testing.T) {
 }
 
 func TestGetDirNameSimpleDir(t *testing.T) {
-	dirName := contentmanagers.GetDirName("/folder/mock", "GET")
+	dirName := contentmanagers.GetDirName("/folder/mock")
 	expectedDirName := "/folder"
 	if dirName != expectedDirName {
 		t.Fail()
@@ -64,7 +64,7 @@ func TestGetDirNameSimpleDir(t *testing.T) {
 }
 
 func TestGetDirNameMultipleDir(t *testing.T) {
-	dirName := contentmanagers.GetDirName("/folder/subfolder/mock", "GET")
+	dirName := contentmanagers.GetDirName("/folder/subfolder/mock")
 	expectedDirName := "/folder/subfolder"
 	if dirName != expectedDirName {
 		t.Fail()
@@ -72,7 +72,7 @@ func TestGetDirNameMultipleDir(t *testing.T) {
 }
 
 func TestGetDirNameRootDir(t *testing.T) {
-	dirName := contentmanagers.GetDirName("/folder", "GET")
+	dirName := contentmanagers.GetDirName("/folder")
 	expectedDirName := ""
 	if dirName != expectedDirName {
 		t.Fail()
