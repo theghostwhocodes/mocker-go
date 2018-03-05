@@ -24,12 +24,23 @@ func GetDirName(urlPath string, method string) string {
 	return dirPath
 }
 
+// GetResourceName return the computed resource name (filename) for the mock
+func GetResourceName(urlPath string) string {
+	urlPathComponents := strings.Split(urlPath, string(os.PathSeparator))
+	resource := urlPathComponents[len(urlPathComponents)-1]
+	return resource
+}
+
 // GetAbsoluteFileName return the full mock filename
 func GetAbsoluteFileName(basePath string, fileName string) string {
 	return path.Join(
 		basePath,
 		fileName,
 	)
+}
+
+func GetMockFiles(dirPath string, urlPath string) {
+
 }
 
 // GetContent return the mock content
