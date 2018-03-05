@@ -31,22 +31,14 @@ func GetResourceName(urlPath string) string {
 	return resource
 }
 
-// GetAbsoluteFileName return the full mock filename
-func GetAbsoluteFileName(basePath string, fileName string) string {
-	return path.Join(
-		basePath,
-		fileName,
-	)
-}
+// func GetMockFiles(dirPath string, urlPath string) {
 
-func GetMockFiles(dirPath string, urlPath string) {
-
-}
+// }
 
 // GetContent return the mock content
 func GetContent(basePath string, r *http.Request) ([]byte, error) {
 	fileName := GetFileName(r.URL.Path[1:], r.Method)
-	content, err := ioutil.ReadFile(GetAbsoluteFileName(basePath, fileName))
+	content, err := ioutil.ReadFile(path.Join(basePath, fileName))
 	return content, err
 }
 

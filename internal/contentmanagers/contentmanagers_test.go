@@ -1,7 +1,6 @@
 package contentmanagers_test
 
 import (
-	"path"
 	"testing"
 
 	"github.com/theghostwhocodes/mocker-go/internal/contentmanagers"
@@ -99,19 +98,6 @@ func TestGetResourceNameRootDir(t *testing.T) {
 	resourceName := contentmanagers.GetResourceName("/folder")
 	expectedResourceName := "folder"
 	if resourceName != expectedResourceName {
-		t.Fail()
-	}
-}
-
-func TestGetAbsoluteFileNameHttpGet(t *testing.T) {
-	fileName := "/folder/mock.GET.json"
-	basePath := "/var/www/"
-	absoluteFileName := contentmanagers.GetAbsoluteFileName(basePath, fileName)
-	expectedAbsoluteFileName := path.Join(
-		basePath,
-		fileName,
-	)
-	if absoluteFileName != expectedAbsoluteFileName {
 		t.Fail()
 	}
 }
