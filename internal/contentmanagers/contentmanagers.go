@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 )
 
@@ -31,13 +32,37 @@ func GetResourceName(urlPath string) string {
 	return resource
 }
 
-// func GetMockFiles(dirPath string, urlPath string) {
+// GetMockFiles return filenames of
+func GetMockFiles(fileInfos []os.FileInfo, resourceName string, httpVerb string) []string {
+	var files []string
+	for _, element := range fileInfos {
+		if !element.IsDir() {
+			elementName := element.Name()
+			re := fmt.Sprintf(`^%s\.(%s)\.`, resourceName, httpVerb)
+			validName := regexp.MustCompile(re)
+			hasMock := validName.MatchString(elementName)
+			if hasMock {
+				files = append(files, elementName)
+			}
+		}
+	}
 
-// }
+	return files
+}
 
 // GetContent return the mock content
 func GetContent(basePath string, r *http.Request) ([]byte, error) {
+	urlPath := r.URL.Path[1:]
+	dirName := GetDirName(urlPath)
+	fileInfos, err := ioutil.ReadDir(path.Join(basePath, dirName))
+
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+
 	fileName := GetFileName(r.URL.Path[1:], r.Method)
+	resourceName := GetResourceName(r.URL.Path[1:])
+	GetMockFiles(fileInfos, resourceName, r.Method)
 	content, err := ioutil.ReadFile(path.Join(basePath, fileName))
 	return content, err
 }
