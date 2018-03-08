@@ -9,7 +9,7 @@ test:
 	go test github.com/theghostwhocodes/mocker-go/internal/... -coverprofile=cover.out
 
 test_content_managers:
-	go test github.com/theghostwhocodes/mocker-go/internal/contentManagers -coverprofile=cover.out
+	go test github.com/theghostwhocodes/mocker-go/internal/contentManagers -v -coverprofile=cover.out
 
 test_validators:
-	go test github.com/theghostwhocodes/mocker-go/internal/validators -coverprofile=cover.out
+	go test github.com/theghostwhocodes/mocker-go/internal/validators -v -coverprofile=cover.out
