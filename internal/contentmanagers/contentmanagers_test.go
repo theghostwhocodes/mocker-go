@@ -1,7 +1,9 @@
 package contentmanagers
 
 import (
+	"os"
 	"testing"
+	"time"
 )
 
 func TestGetFileNameHttpGet(t *testing.T) {
@@ -96,6 +98,51 @@ func TestGetResourceNameRootDir(t *testing.T) {
 	resourceName := GetResourceName("/folder")
 	expectedResourceName := "folder"
 	if resourceName != expectedResourceName {
+		t.Fail()
+	}
+}
+
+type mockedFile struct {
+	FileName string
+	Dir      bool
+}
+
+func (m mockedFile) Name() string {
+	return m.FileName
+}
+
+func (m mockedFile) Size() int64 {
+	return 1
+}
+
+func (m mockedFile) Mode() os.FileMode {
+	return 1
+}
+
+func (m mockedFile) ModTime() time.Time {
+	return time.Now()
+}
+
+func (m mockedFile) IsDir() bool {
+	return m.Dir
+}
+
+func (m mockedFile) Sys() interface{} {
+	return nil
+}
+
+func TestGetMockFiles(t *testing.T) {
+	m1 := mockedFile{FileName: "test1.GET.json", Dir: false}
+	m2 := mockedFile{FileName: "test2.GET.001.json", Dir: false}
+	m3 := mockedFile{FileName: "test2.GET.002.json", Dir: false}
+	m4 := mockedFile{FileName: "test3.GET.json", Dir: false}
+	m5 := mockedFile{FileName: "test2", Dir: true}
+	m6 := mockedFile{FileName: "test4.GET.json", Dir: false}
+	files := []os.FileInfo{m1, m2, m3, m4, m5, m6}
+
+	mockFiles := GetMockFiles(files, "test2", "GET")
+
+	if len(mockFiles) != 2 {
 		t.Fail()
 	}
 }
