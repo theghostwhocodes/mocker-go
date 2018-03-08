@@ -147,6 +147,39 @@ func TestGetMockFiles(t *testing.T) {
 	}
 }
 
+func TestGetMockFilesHTTP01(t *testing.T) {
+	m1 := mockedFile{FileName: "test1.GET.json", Dir: false}
+	m2 := mockedFile{FileName: "test2.GET.001.json", Dir: false}
+	m3 := mockedFile{FileName: "test2.GET.002.json", Dir: false}
+	m4 := mockedFile{FileName: "test3.HTTP.json", Dir: false}
+	m5 := mockedFile{FileName: "test2", Dir: true}
+	m6 := mockedFile{FileName: "test4.GET.json", Dir: false}
+	files := []os.FileInfo{m1, m2, m3, m4, m5, m6}
+
+	mockFiles := GetMockFiles(files, "test3", "POST")
+
+	if len(mockFiles) != 1 {
+		t.Fail()
+	}
+}
+
+func TestGetMockFilesHTTP02(t *testing.T) {
+	m1 := mockedFile{FileName: "test1.GET.json", Dir: false}
+	m2 := mockedFile{FileName: "test2.GET.json", Dir: false}
+	m3 := mockedFile{FileName: "test2.HTTP.json", Dir: false}
+	m4 := mockedFile{FileName: "test2.POST.json", Dir: false}
+	m5 := mockedFile{FileName: "test2", Dir: true}
+	m6 := mockedFile{FileName: "test4.GET.json", Dir: false}
+	m7 := mockedFile{FileName: "test2.GET.001.json", Dir: false}
+	files := []os.FileInfo{m1, m2, m3, m4, m5, m6, m7}
+
+	mockFiles := GetMockFiles(files, "test2", "GET")
+
+	if len(mockFiles) != 3 {
+		t.Fail()
+	}
+}
+
 func TestGetBodyContentSuccess(t *testing.T) {
 	jsonMap := map[string]interface{}{
 		"request": nil,

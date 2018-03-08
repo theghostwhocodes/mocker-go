@@ -38,7 +38,7 @@ func GetMockFiles(fileInfos []os.FileInfo, resourceName string, httpVerb string)
 	for _, element := range fileInfos {
 		if !element.IsDir() {
 			elementName := element.Name()
-			re := fmt.Sprintf(`^%s\.(%s)\.`, resourceName, httpVerb)
+			re := fmt.Sprintf(`^%s\.(%s|HTTP)\.`, resourceName, httpVerb)
 			validName := regexp.MustCompile(re)
 			hasMock := validName.MatchString(elementName)
 			if hasMock {
