@@ -1,14 +1,12 @@
-package validators_test
+package validators
 
 import (
 	"testing"
-
-	"github.com/theghostwhocodes/mocker-go/internal/validators"
 )
 
 func TestIsValidJSON(t *testing.T) {
 	content := "{\"key\": \"value\"}"
-	isValid := validators.IsValidJSON([]byte(content))
+	isValid := IsValidJSON([]byte(content))
 
 	if !isValid {
 		t.Fail()
@@ -17,7 +15,7 @@ func TestIsValidJSON(t *testing.T) {
 
 func TestIsNotValidJSON(t *testing.T) {
 	content := "{\"key\": \"value}"
-	notValid := validators.IsValidJSON([]byte(content))
+	notValid := IsValidJSON([]byte(content))
 
 	if notValid {
 		t.Fail()
@@ -29,7 +27,7 @@ func TestHasRequest(t *testing.T) {
 		"key":     "value",
 		"request": "another value",
 	}
-	hasRequest := validators.HasRequest(content)
+	hasRequest := HasRequest(content)
 
 	if !hasRequest {
 		t.Fail()
@@ -41,7 +39,7 @@ func TestHasNotRequest(t *testing.T) {
 		"key": "value",
 		"req": "another value",
 	}
-	hasNotRequest := validators.HasRequest(content)
+	hasNotRequest := HasRequest(content)
 
 	if hasNotRequest {
 		t.Fail()
@@ -53,7 +51,7 @@ func TestHasResponse(t *testing.T) {
 		"key":      "value",
 		"response": "another value",
 	}
-	hasResponse := validators.HasResponse(content)
+	hasResponse := HasResponse(content)
 
 	if !hasResponse {
 		t.Fail()
@@ -65,7 +63,7 @@ func TestHasNotResponse(t *testing.T) {
 		"key": "value",
 		"req": "another value",
 	}
-	hasNotResponse := validators.HasResponse(content)
+	hasNotResponse := HasResponse(content)
 
 	if hasNotResponse {
 		t.Fail()
