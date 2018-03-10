@@ -50,6 +50,25 @@ func GetMockFiles(fileInfos []os.FileInfo, resourceName string, httpVerb string)
 	return files
 }
 
+// ScanMockFilesContent scans the mock file content and return an array of mocks
+func ScanMockFilesContent(basePath string, dirName string, fileNames []string) []MockHTTP {
+	var results []MockHTTP
+	for _, filename := range fileNames {
+		content, _ := ioutil.ReadFile(path.Join(basePath, dirName, filename))
+		var jsonContent MockHTTP
+		err := json.Unmarshal(content, &jsonContent)
+
+		if err != nil {
+			fmt.Printf("Error %v\n", err)
+			continue
+		}
+
+		results = append(results, jsonContent)
+	}
+
+	return results
+}
+
 // GetContent return the mock content
 func GetContent(basePath string, r *http.Request) ([]byte, error) {
 	urlPath := r.URL.Path[1:]
@@ -62,7 +81,9 @@ func GetContent(basePath string, r *http.Request) ([]byte, error) {
 
 	fileName := GetFileName(r.URL.Path[1:], r.Method)
 	resourceName := GetResourceName(r.URL.Path[1:])
-	GetMockFiles(fileInfos, resourceName, r.Method)
+	mockFiles := GetMockFiles(fileInfos, resourceName, r.Method)
+	results := ScanMockFilesContent(basePath, dirName, mockFiles)
+	fmt.Printf("%v", results)
 	content, err := ioutil.ReadFile(path.Join(basePath, fileName))
 	return content, err
 }
