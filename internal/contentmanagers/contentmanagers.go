@@ -88,6 +88,23 @@ func GetContent(basePath string, r *http.Request) ([]byte, error) {
 	return content, err
 }
 
+// GetScannedMockContent return the mock content in form of a MockHTTP struct
+func GetScannedMockContent(basePath string, r *http.Request) ([]MockHTTP, error) {
+	urlPath := r.URL.Path[1:]
+	dirName := GetDirName(urlPath)
+	fileInfos, err := ioutil.ReadDir(path.Join(basePath, dirName))
+
+	if err != nil {
+		fmt.Printf("%v", err)
+		return nil, err
+	}
+
+	resourceName := GetResourceName(r.URL.Path[1:])
+	mockFiles := GetMockFiles(fileInfos, resourceName, r.Method)
+	results := ScanMockFilesContent(basePath, dirName, mockFiles)
+	return results, nil
+}
+
 // GetBodyContent return the stub body content
 func GetBodyContent(jsonMap map[string]interface{}) ([]byte, error) {
 	response, ok := jsonMap["response"]

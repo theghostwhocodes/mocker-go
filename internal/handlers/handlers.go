@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/theghostwhocodes/mocker-go/internal/contentmanagers"
-	"github.com/theghostwhocodes/mocker-go/internal/validators"
 )
 
 func getMapFromBytes(content []byte) map[string]interface{} {
@@ -31,30 +30,10 @@ func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
 // HandlerFactory return a proper handler
 func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		content, err := contentmanagers.GetContent(basePath, r)
-		isValid := validators.IsValidJSON(content)
+		jsonMaps, err := contentmanagers.GetScannedMockContent(basePath, r)
+		jsonMap := jsonMaps[0]
 
-		if err != nil {
-			sendErrorMessage(w, err.Error())
-			return
-		}
-
-		if !isValid {
-			sendErrorMessage(w, "The mock file contains invalid JSON")
-			return
-		}
-
-		jsonMap := getMapFromBytes(content)
-		if !validators.HasRequest(jsonMap) {
-			sendErrorMessage(w, "Oops, probably your mock file doesn't contain 'request' section")
-			return
-		}
-		if !validators.HasResponse(jsonMap) {
-			sendErrorMessage(w, "Oops, probably you mock file doesn't contain 'response' section")
-			return
-		}
-
-		body, err := contentmanagers.GetBodyContent(jsonMap)
+		body, _ := json.Marshal(jsonMap.Response.Body)
 		if err != nil {
 			sendErrorMessage(w, err.Error())
 		}
