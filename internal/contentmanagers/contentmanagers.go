@@ -51,7 +51,7 @@ func GetMockFiles(fileInfos []os.FileInfo, resourceName string, httpVerb string)
 }
 
 // ScanMockFilesContent scans the mock file content and return an array of mocks
-func ScanMockFilesContent(basePath string, dirName string, fileNames []string) []MockHTTP {
+func ScanMockFilesContent(basePath string, dirName string, fileNames []string) ([]MockHTTP, error) {
 	var results []MockHTTP
 	for _, filename := range fileNames {
 		content, _ := ioutil.ReadFile(path.Join(basePath, dirName, filename))
@@ -59,34 +59,33 @@ func ScanMockFilesContent(basePath string, dirName string, fileNames []string) [
 		err := json.Unmarshal(content, &jsonContent)
 
 		if err != nil {
-			fmt.Printf("Error %v\n", err)
-			continue
+			return nil, err
 		}
 
 		results = append(results, jsonContent)
 	}
 
-	return results
+	return results, nil
 }
 
 // GetContent return the mock content
-func GetContent(basePath string, r *http.Request) ([]byte, error) {
-	urlPath := r.URL.Path[1:]
-	dirName := GetDirName(urlPath)
-	fileInfos, err := ioutil.ReadDir(path.Join(basePath, dirName))
+// func GetContent(basePath string, r *http.Request) ([]byte, error) {
+// 	urlPath := r.URL.Path[1:]
+// 	dirName := GetDirName(urlPath)
+// 	fileInfos, err := ioutil.ReadDir(path.Join(basePath, dirName))
 
-	if err != nil {
-		fmt.Printf("%v", err)
-	}
+// 	if err != nil {
+// 		fmt.Printf("%v", err)
+// 	}
 
-	fileName := GetFileName(r.URL.Path[1:], r.Method)
-	resourceName := GetResourceName(r.URL.Path[1:])
-	mockFiles := GetMockFiles(fileInfos, resourceName, r.Method)
-	results := ScanMockFilesContent(basePath, dirName, mockFiles)
-	fmt.Printf("%v", results)
-	content, err := ioutil.ReadFile(path.Join(basePath, fileName))
-	return content, err
-}
+// 	fileName := GetFileName(r.URL.Path[1:], r.Method)
+// 	resourceName := GetResourceName(r.URL.Path[1:])
+// 	mockFiles := GetMockFiles(fileInfos, resourceName, r.Method)
+// 	results := ScanMockFilesContent(basePath, dirName, mockFiles)
+// 	fmt.Printf("%v", results)
+// 	content, err := ioutil.ReadFile(path.Join(basePath, fileName))
+// 	return content, err
+// }
 
 // GetScannedMockContent return the mock content in form of a MockHTTP struct
 func GetScannedMockContent(basePath string, r *http.Request) ([]MockHTTP, error) {
@@ -95,13 +94,17 @@ func GetScannedMockContent(basePath string, r *http.Request) ([]MockHTTP, error)
 	fileInfos, err := ioutil.ReadDir(path.Join(basePath, dirName))
 
 	if err != nil {
-		fmt.Printf("%v", err)
 		return nil, err
 	}
 
 	resourceName := GetResourceName(r.URL.Path[1:])
 	mockFiles := GetMockFiles(fileInfos, resourceName, r.Method)
-	results := ScanMockFilesContent(basePath, dirName, mockFiles)
+	results, err := ScanMockFilesContent(basePath, dirName, mockFiles)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return results, nil
 }
 
