@@ -5,7 +5,7 @@ type MockHTTPRequest struct {
 	Method  string
 	Params  map[string]string
 	Payload string
-	Headers map[string]string
+	Headers map[string][]string
 }
 
 // MockHTTPResponse is the struct for the reponse part of the mock content
