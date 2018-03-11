@@ -88,6 +88,32 @@ func checkArrayEquality(array1 []string, array2 []string) bool {
 	return result
 }
 
+func FilterMockHeaderContent(mocks []MockHTTP, r *http.Request) (MockHTTP, error) {
+	var result MockHTTP
+	maxMatch := 0
+	for _, mock := range mocks {
+		matchCounter := 0
+		for key, values := range r.Header {
+			// fmt.Printf("Key %s - Value %s\n", key, value)
+			mockValue, ok := mock.Request.Headers[key]
+			if !ok {
+				continue
+			}
+
+			if checkArrayEquality(mockValue, values) {
+				matchCounter++
+			}
+		}
+
+		if matchCounter > maxMatch {
+			result = mock
+			maxMatch = matchCounter
+		}
+	}
+
+	return result, nil
+}
+
 // GetScannedMockContent return the mock content in form of a MockHTTP struct
 func GetScannedMockContent(basePath string, r *http.Request) ([]MockHTTP, error) {
 	urlPath := r.URL.Path[1:]
