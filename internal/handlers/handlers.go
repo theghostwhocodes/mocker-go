@@ -31,11 +31,11 @@ func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
 func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		jsonMaps, err := contentmanagers.GetScannedMockContent(basePath, r)
-		jsonMap := jsonMaps[0]
-
 		if err != nil {
 			sendErrorMessage(w, err.Error())
+			return
 		}
+		jsonMap := jsonMaps[0]
 
 		body, _ := json.Marshal(jsonMap.Response.Body)
 		manageSuccess(w, r, body)

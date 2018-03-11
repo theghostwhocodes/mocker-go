@@ -54,10 +54,13 @@ func GetMockFiles(fileInfos []os.FileInfo, resourceName string, httpVerb string)
 func ScanMockFilesContent(basePath string, dirName string, fileNames []string) ([]MockHTTP, error) {
 	var results []MockHTTP
 	for _, filename := range fileNames {
-		content, _ := ioutil.ReadFile(path.Join(basePath, dirName, filename))
-		var jsonContent MockHTTP
-		err := json.Unmarshal(content, &jsonContent)
+		content, err := ioutil.ReadFile(path.Join(basePath, dirName, filename))
+		if err != nil {
+			return nil, err
+		}
 
+		var jsonContent MockHTTP
+		err = json.Unmarshal(content, &jsonContent)
 		if err != nil {
 			return nil, err
 		}
