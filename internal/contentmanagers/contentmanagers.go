@@ -71,6 +71,23 @@ func ScanMockFilesContent(basePath string, dirName string, fileNames []string) (
 	return results, nil
 }
 
+func checkArrayEquality(array1 []string, array2 []string) bool {
+	result := false
+	if len(array1) != len(array2) {
+		return result
+	}
+
+	for index, value := range array1 {
+		if value == array2[index] {
+			result = true
+		} else {
+			result = false
+		}
+	}
+
+	return result
+}
+
 // GetScannedMockContent return the mock content in form of a MockHTTP struct
 func GetScannedMockContent(basePath string, r *http.Request) ([]MockHTTP, error) {
 	urlPath := r.URL.Path[1:]
