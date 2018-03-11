@@ -3,7 +3,7 @@
     "method": "GET",
     "payload": "",
     "headers": {
-      "X-Custom-Header": "Custom header"
+      "X-Custom-Header": ["Custom header"]
     }
   },
   "response": {
