@@ -89,9 +89,16 @@ func checkArrayEquality(array1 []string, array2 []string) bool {
 }
 
 func FilterMockHeaderContent(mocks []MockHTTP, r *http.Request) (results []MockHTTP, err error) {
+	var emptyHeaderMatches []MockHTTP
+	var matches []MockHTTP
 	for _, mock := range mocks {
 		counter := 0
 		matchCounter := 0
+
+		if len(mock.Request.Headers) == 0 {
+			emptyHeaderMatches = append(emptyHeaderMatches, mock)
+		}
+
 		for key, values := range mock.Request.Headers {
 			counter++
 			headerValues, ok := r.Header[key]
@@ -105,11 +112,16 @@ func FilterMockHeaderContent(mocks []MockHTTP, r *http.Request) (results []MockH
 		}
 
 		if matchCounter == counter {
-			results = append(results, mock)
+			fmt.Printf("Match, %s\n", mock.Request.Headers)
+			matches = append(matches, mock)
 		}
 	}
 
-	return results, nil
+	if len(matches) > 0 {
+		return matches, nil
+	}
+
+	return emptyHeaderMatches, nil
 }
 
 // GetScannedMockContent return the mock content in form of a MockHTTP struct
@@ -131,7 +143,7 @@ func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []
 	}
 
 	filteredResults, err = FilterMockHeaderContent(results, r)
-	fmt.Printf("%v\n", filteredResults)
+	// fmt.Printf("%v\n", filteredResults)
 
 	if err != nil {
 		return filteredResults, err
