@@ -88,40 +88,38 @@ func checkArrayEquality(array1 []string, array2 []string) bool {
 	return result
 }
 
-func FilterMockHeaderContent(mocks []MockHTTP, r *http.Request) (MockHTTP, error) {
-	var result MockHTTP
-	maxMatch := 0
+func FilterMockHeaderContent(mocks []MockHTTP, r *http.Request) (results []MockHTTP, err error) {
 	for _, mock := range mocks {
+		counter := 0
 		matchCounter := 0
-		for key, values := range r.Header {
-			// fmt.Printf("Key %s - Value %s\n", key, value)
-			mockValue, ok := mock.Request.Headers[key]
+		for key, values := range mock.Request.Headers {
+			counter++
+			headerValues, ok := r.Header[key]
 			if !ok {
 				continue
 			}
 
-			if checkArrayEquality(mockValue, values) {
+			if checkArrayEquality(values, headerValues) {
 				matchCounter++
 			}
 		}
 
-		if matchCounter > maxMatch {
-			result = mock
-			maxMatch = matchCounter
+		if matchCounter == counter {
+			results = append(results, mock)
 		}
 	}
 
-	return result, nil
+	return results, nil
 }
 
 // GetScannedMockContent return the mock content in form of a MockHTTP struct
-func GetScannedMockContent(basePath string, r *http.Request) ([]MockHTTP, error) {
+func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []MockHTTP, err error) {
 	urlPath := r.URL.Path[1:]
 	dirName := GetDirName(urlPath)
 	fileInfos, err := ioutil.ReadDir(path.Join(basePath, dirName))
 
 	if err != nil {
-		return nil, err
+		return filteredResults, err
 	}
 
 	resourceName := GetResourceName(r.URL.Path[1:])
@@ -129,10 +127,17 @@ func GetScannedMockContent(basePath string, r *http.Request) ([]MockHTTP, error)
 	results, err := ScanMockFilesContent(basePath, dirName, mockFiles)
 
 	if err != nil {
-		return nil, err
+		return filteredResults, err
 	}
 
-	return results, nil
+	filteredResults, err = FilterMockHeaderContent(results, r)
+	fmt.Printf("%v\n", filteredResults)
+
+	if err != nil {
+		return filteredResults, err
+	}
+
+	return filteredResults, nil
 }
 
 // GetBodyContent return the stub body content
