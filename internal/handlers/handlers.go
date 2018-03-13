@@ -40,6 +40,7 @@ func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
+
 		jsonMap := jsonMaps[0]
 
 		body, _ := json.Marshal(jsonMap.Response.Body)
