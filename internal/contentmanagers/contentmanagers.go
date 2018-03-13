@@ -152,7 +152,8 @@ func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []
 		return filteredResults, err
 	}
 
-	filteredResults, err = FilterMockHeaderContent(results, r)
+	filteredResults, err = FilterMockHTTPMethod(results, r)
+	filteredResults, err = FilterMockHeaderContent(filteredResults, r)
 	// fmt.Printf("%v\n", filteredResults)
 
 	if err != nil {
