@@ -88,6 +88,16 @@ func checkArrayEquality(array1 []string, array2 []string) bool {
 	return result
 }
 
+func FilterMockHTTPMethod(mocks []MockHTTP, r *http.Request) (results []MockHTTP, err error) {
+	for _, mock := range mocks {
+		if r.Method == mock.Request.Method {
+			results = append(results, mock)
+		}
+	}
+
+	return results, nil
+}
+
 func FilterMockHeaderContent(mocks []MockHTTP, r *http.Request) (results []MockHTTP, err error) {
 	var emptyHeaderMatches []MockHTTP
 	var matches []MockHTTP
