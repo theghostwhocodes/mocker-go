@@ -4,7 +4,7 @@
     "params": {},
     "payload": "",
     "headers": {
-      "X-Custom-Header": ["Custom header"]
+      "X-Custom-Header": ["Custom header 2"]
     }
   },
   "response": {
@@ -12,7 +12,7 @@
       "Content-Type": "application/json"
     },
     "body": {
-      "key": "value"
+      "key": "value 2"
     }
   }
 }

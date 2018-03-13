@@ -1,17 +1,14 @@
 {
   "request": {
     "method": "GET",
-    "payload": "",
-    "headers": {
-      "X-Custom-Header": ["Custom header"]
-    }
+    "payload": ""
   },
   "response": {
     "headers": {
       "Content-Type": "application/json"
     },
     "body": {
-      "key": "value 1"
+      "key": "value 3"
     }
   }
 }
