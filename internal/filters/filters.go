@@ -24,6 +24,7 @@ func checkArrayEquality(array1 []string, array2 []string) bool {
 	return result
 }
 
+// FilterMockHTTPMethod filters mock by HTTP method
 func FilterMockHTTPMethod(mocks []models.MockHTTP, method string) (results []models.MockHTTP, err error) {
 	for _, mock := range mocks {
 		if method == mock.Request.Method {
@@ -34,6 +35,7 @@ func FilterMockHTTPMethod(mocks []models.MockHTTP, method string) (results []mod
 	return results, nil
 }
 
+// FilterMockHeaderContent filters mock by HTTP headers content
 func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (results []models.MockHTTP, err error) {
 	var emptyHeaderMatches []models.MockHTTP
 	var matches []models.MockHTTP
