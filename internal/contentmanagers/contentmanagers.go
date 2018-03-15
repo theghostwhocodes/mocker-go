@@ -10,6 +10,9 @@ import (
 	"path"
 	"regexp"
 	"strings"
+
+	"github.com/theghostwhocodes/mocker-go/internal/filters"
+	"github.com/theghostwhocodes/mocker-go/internal/models"
 )
 
 // GetFileName return the computed file name for the mock
@@ -51,15 +54,15 @@ func GetMockFiles(fileInfos []os.FileInfo, resourceName string, httpVerb string)
 }
 
 // ScanMockFilesContent scans the mock file content and return an array of mocks
-func ScanMockFilesContent(basePath string, dirName string, fileNames []string) ([]MockHTTP, error) {
-	var results []MockHTTP
+func ScanMockFilesContent(basePath string, dirName string, fileNames []string) ([]models.MockHTTP, error) {
+	var results []models.MockHTTP
 	for _, filename := range fileNames {
 		content, err := ioutil.ReadFile(path.Join(basePath, dirName, filename))
 		if err != nil {
 			return nil, err
 		}
 
-		var jsonContent MockHTTP
+		var jsonContent models.MockHTTP
 		err = json.Unmarshal(content, &jsonContent)
 		if err != nil {
 			return nil, err
@@ -71,71 +74,8 @@ func ScanMockFilesContent(basePath string, dirName string, fileNames []string) (
 	return results, nil
 }
 
-func checkArrayEquality(array1 []string, array2 []string) bool {
-	result := false
-	if len(array1) != len(array2) {
-		return result
-	}
-
-	for index, value := range array1 {
-		if value == array2[index] {
-			result = true
-		} else {
-			result = false
-		}
-	}
-
-	return result
-}
-
-func FilterMockHTTPMethod(mocks []MockHTTP, method string) (results []MockHTTP, err error) {
-	for _, mock := range mocks {
-		if method == mock.Request.Method {
-			results = append(results, mock)
-		}
-	}
-
-	return results, nil
-}
-
-func FilterMockHeaderContent(mocks []MockHTTP, headers http.Header) (results []MockHTTP, err error) {
-	var emptyHeaderMatches []MockHTTP
-	var matches []MockHTTP
-	for _, mock := range mocks {
-		counter := 0
-		matchCounter := 0
-
-		if len(mock.Request.Headers) == 0 {
-			emptyHeaderMatches = append(emptyHeaderMatches, mock)
-		}
-
-		for key, values := range mock.Request.Headers {
-			counter++
-			headerValues, ok := headers[key]
-			if !ok {
-				continue
-			}
-
-			if checkArrayEquality(values, headerValues) {
-				matchCounter++
-			}
-		}
-
-		if matchCounter == counter {
-			fmt.Printf("Match, %s\n", mock.Request.Headers)
-			matches = append(matches, mock)
-		}
-	}
-
-	if len(matches) > 0 {
-		return matches, nil
-	}
-
-	return emptyHeaderMatches, nil
-}
-
-// GetScannedMockContent return the mock content in form of a MockHTTP struct
-func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []MockHTTP, err error) {
+// GetScannedMockContent return the mock content in form of a models.MockHTTP struct
+func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []models.MockHTTP, err error) {
 	urlPath := r.URL.Path[1:]
 	dirName := GetDirName(urlPath)
 	fileInfos, err := ioutil.ReadDir(path.Join(basePath, dirName))
@@ -152,8 +92,8 @@ func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []
 		return filteredResults, err
 	}
 
-	filteredResults, err = FilterMockHTTPMethod(results, r.Method)
-	filteredResults, err = FilterMockHeaderContent(filteredResults, r.Header)
+	filteredResults, err = filters.FilterMockHTTPMethod(results, r.Method)
+	filteredResults, err = filters.FilterMockHeaderContent(filteredResults, r.Header)
 	// fmt.Printf("%v\n", filteredResults)
 
 	if err != nil {

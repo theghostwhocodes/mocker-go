@@ -1,4 +1,4 @@
-package contentmanagers
+package models
 
 // MockHTTPRequest is the struct for the request part of the mock content
 type MockHTTPRequest struct {
