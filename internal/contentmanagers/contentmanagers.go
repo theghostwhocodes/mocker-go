@@ -88,9 +88,9 @@ func checkArrayEquality(array1 []string, array2 []string) bool {
 	return result
 }
 
-func FilterMockHTTPMethod(mocks []MockHTTP, r *http.Request) (results []MockHTTP, err error) {
+func FilterMockHTTPMethod(mocks []MockHTTP, method string) (results []MockHTTP, err error) {
 	for _, mock := range mocks {
-		if r.Method == mock.Request.Method {
+		if method == mock.Request.Method {
 			results = append(results, mock)
 		}
 	}
@@ -98,7 +98,7 @@ func FilterMockHTTPMethod(mocks []MockHTTP, r *http.Request) (results []MockHTTP
 	return results, nil
 }
 
-func FilterMockHeaderContent(mocks []MockHTTP, r *http.Request) (results []MockHTTP, err error) {
+func FilterMockHeaderContent(mocks []MockHTTP, headers http.Header) (results []MockHTTP, err error) {
 	var emptyHeaderMatches []MockHTTP
 	var matches []MockHTTP
 	for _, mock := range mocks {
@@ -111,7 +111,7 @@ func FilterMockHeaderContent(mocks []MockHTTP, r *http.Request) (results []MockH
 
 		for key, values := range mock.Request.Headers {
 			counter++
-			headerValues, ok := r.Header[key]
+			headerValues, ok := headers[key]
 			if !ok {
 				continue
 			}
@@ -152,8 +152,8 @@ func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []
 		return filteredResults, err
 	}
 
-	filteredResults, err = FilterMockHTTPMethod(results, r)
-	filteredResults, err = FilterMockHeaderContent(filteredResults, r)
+	filteredResults, err = FilterMockHTTPMethod(results, r.Method)
+	filteredResults, err = FilterMockHeaderContent(filteredResults, r.Header)
 	// fmt.Printf("%v\n", filteredResults)
 
 	if err != nil {
