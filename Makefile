@@ -1,4 +1,4 @@
-.PHONY: build test
+.PHONY: build test cover-report
 
 default: build
 
@@ -13,3 +13,6 @@ test_content_managers:
 
 test_validators:
 	go test github.com/theghostwhocodes/mocker-go/internal/validators -v -coverprofile=cover.out
+
+cover-report:
+	go tool cover -html=cover.out
