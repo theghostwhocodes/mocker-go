@@ -67,3 +67,85 @@ func TestFilterMockHTTPMethod(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestFilterMockHeaderContentSimpleHeader(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Headers: map[string][]string{
+				"Header1": []string{"Value1", "Value2"},
+			},
+		},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Headers: map[string][]string{
+				"Header3": []string{"Value5", "Value6"},
+				"Header4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Headers: map[string][]string{
+				"Header1": []string{"Value1", "Value2"},
+				"Header2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	headers := map[string][]string{
+		"Header1": []string{"Value1", "Value2"},
+	}
+	filtered, err := FilterMockHeaderContent(mocks, headers)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 1 {
+		t.Fail()
+	}
+}
+
+func TestFilterMockHeaderContentDoubleHeader(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Headers: map[string][]string{
+				"Header1": []string{"Value1", "Value2"},
+				"Header2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Headers: map[string][]string{
+				"Header3": []string{"Value5", "Value6"},
+				"Header4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Headers: map[string][]string{
+				"Header1": []string{"Value1", "Value2"},
+				"Header2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	headers := map[string][]string{
+		"Header1": []string{"Value1", "Value2"},
+		"Header2": []string{"Value3", "Value4"},
+	}
+	filtered, err := FilterMockHeaderContent(mocks, headers)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 2 {
+		t.Fail()
+	}
+}
