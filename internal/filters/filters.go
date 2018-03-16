@@ -44,6 +44,7 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 
 		if len(mock.Request.Headers) == 0 {
 			emptyHeaderMatches = append(emptyHeaderMatches, mock)
+			continue
 		}
 
 		for key, values := range mock.Request.Headers {
@@ -59,7 +60,6 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 		}
 
 		if matchCounter == counter {
-			// fmt.Printf("Match, %s\n", mock.Request.Headers)
 			matches = append(matches, mock)
 		}
 	}
