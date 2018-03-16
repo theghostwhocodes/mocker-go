@@ -1,7 +1,6 @@
 package filters
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/theghostwhocodes/mocker-go/internal/models"
@@ -60,7 +59,7 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 		}
 
 		if matchCounter == counter {
-			fmt.Printf("Match, %s\n", mock.Request.Headers)
+			// fmt.Printf("Match, %s\n", mock.Request.Headers)
 			matches = append(matches, mock)
 		}
 	}
