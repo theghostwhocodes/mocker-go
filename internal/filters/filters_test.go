@@ -394,3 +394,42 @@ func TestFilterMockPayloadContentNoMatch(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestFilterMockPayloadContentNoPayloadWithAMatch(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Payload: map[string][]string{
+				"Payload3": []string{"Value5", "Value6"},
+				"Payload4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Payload: map[string][]string{
+				"Payload1": []string{"Value1", "Value2"},
+				"Payload2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	headers := map[string][]string{
+		"Payload1": []string{"Value1", "Value2"},
+		"Payload2": []string{"Value3", "Value4"},
+	}
+	filtered, err := FilterMockPayloadContent(mocks, headers)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	fmt.Printf("%v\n", filtered)
+	fmt.Printf("%v", len(filtered))
+	if len(filtered) != 1 {
+		t.Fail()
+	}
+}
