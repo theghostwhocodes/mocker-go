@@ -310,3 +310,45 @@ func TestFilterMockHeaderContentSimplePayload(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestFilterMockHeaderContentDoublePayload(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Payload: map[string][]string{
+				"Payload1": []string{"Value1", "Value2"},
+				"Payload2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Payload: map[string][]string{
+				"Payload3": []string{"Value5", "Value6"},
+				"Payload4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Payload: map[string][]string{
+				"Payload1": []string{"Value1", "Value2"},
+				"Payload2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	headers := map[string][]string{
+		"Payload1": []string{"Value1", "Value2"},
+		"Payload2": []string{"Value3", "Value4"},
+	}
+	filtered, err := FilterMockPayloadContent(mocks, headers)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 2 {
+		t.Fail()
+	}
+}
