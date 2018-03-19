@@ -78,12 +78,12 @@ func FilterMockPayloadContent(mocks []models.MockHTTP, payload interface{}) (res
 	for _, mock := range mocks {
 		mockPayload := mock.Request.Payload
 
-		if reflect.DeepEqual(mockPayload, reflect.Zero(reflect.TypeOf(mockPayload)).Interface()) {
+		if mockPayload == nil {
 			emptyMatches = append(emptyMatches, mock)
 			continue
 		}
 
-		if reflect.DeepEqual(mock.Request.Payload, payload) {
+		if reflect.DeepEqual(mockPayload, payload) {
 			matches = append(matches, mock)
 		}
 	}
