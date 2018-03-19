@@ -4,7 +4,7 @@ package models
 type MockHTTPRequest struct {
 	Method  string
 	Params  map[string]string
-	Payload string
+	Payload interface{}
 	Headers map[string][]string
 }
 
