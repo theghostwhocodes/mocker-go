@@ -1,7 +1,7 @@
 package filters
 
 import (
-	"fmt"
+	"net/url"
 	"testing"
 
 	"github.com/theghostwhocodes/mocker-go/internal/models"
@@ -225,8 +225,6 @@ func TestFilterMockHeaderContentNoHeaderWithAMatch(t *testing.T) {
 		t.Fail()
 	}
 
-	fmt.Printf("%v\n", filtered)
-	fmt.Printf("%v", len(filtered))
 	if len(filtered) != 1 {
 		t.Fail()
 	}
@@ -264,14 +262,12 @@ func TestFilterMockHeaderContentNoHeaderWithAMatch2(t *testing.T) {
 		t.Fail()
 	}
 
-	fmt.Printf("%v\n", filtered)
-	fmt.Printf("%v", len(filtered))
 	if len(filtered) != 1 {
 		t.Fail()
 	}
 }
 
-func TestFilterMockHeaderContentSimplePayload(t *testing.T) {
+func TestFilterMockPayloadContentSimple(t *testing.T) {
 	mockHTTP1 := models.MockHTTP{
 		Request: models.MockHTTPRequest{
 			Payload: map[string][]string{
@@ -297,10 +293,10 @@ func TestFilterMockHeaderContentSimplePayload(t *testing.T) {
 	}
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
-	headers := map[string][]string{
+	payload := url.Values{
 		"Payload1": []string{"Value1", "Value2"},
 	}
-	filtered, err := FilterMockPayloadContent(mocks, headers)
+	filtered, err := FilterMockPayloadContent(mocks, payload)
 
 	if err != nil {
 		t.Fail()
@@ -338,11 +334,11 @@ func TestFilterMockHeaderContentDoublePayload(t *testing.T) {
 	}
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
-	headers := map[string][]string{
+	payload := url.Values{
 		"Payload1": []string{"Value1", "Value2"},
 		"Payload2": []string{"Value3", "Value4"},
 	}
-	filtered, err := FilterMockPayloadContent(mocks, headers)
+	filtered, err := FilterMockPayloadContent(mocks, payload)
 
 	if err != nil {
 		t.Fail()
@@ -427,8 +423,6 @@ func TestFilterMockPayloadContentNoPayloadWithAMatch(t *testing.T) {
 		t.Fail()
 	}
 
-	fmt.Printf("%v\n", filtered)
-	fmt.Printf("%v", len(filtered))
 	if len(filtered) != 1 {
 		t.Fail()
 	}
@@ -466,8 +460,6 @@ func TestFilterMockPayloadContentNoPayloadWithAMatch2(t *testing.T) {
 		t.Fail()
 	}
 
-	fmt.Printf("%v\n", filtered)
-	fmt.Printf("%v", len(filtered))
 	if len(filtered) != 1 {
 		t.Fail()
 	}
