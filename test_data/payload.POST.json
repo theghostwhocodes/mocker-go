@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "payload": {
+      "key1": ["value1"]
+    }
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "key": "value payload"
+    }
+  }
+}

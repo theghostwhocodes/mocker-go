@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "params": {}
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "key": "value nopayload"
+    }
+  }
+}
