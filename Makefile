@@ -11,6 +11,9 @@ test:
 test_content_managers:
 	go test github.com/theghostwhocodes/mocker-go/internal/contentManagers -v -coverprofile=cover.out
 
+test_filters:
+	go test github.com/theghostwhocodes/mocker-go/internal/filters -v -coverprofile=cover.out
+
 test_validators:
 	go test github.com/theghostwhocodes/mocker-go/internal/validators -v -coverprofile=cover.out
 
