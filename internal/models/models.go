@@ -1,10 +1,14 @@
 package models
 
+import (
+	"net/url"
+)
+
 // MockHTTPRequest is the struct for the request part of the mock content
 type MockHTTPRequest struct {
 	Method  string
 	Params  map[string]string
-	Payload interface{}
+	Payload url.Values
 	Headers map[string][]string
 }
 
