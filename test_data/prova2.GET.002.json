@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "payload": ""
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "key": "value 3"
+    }
+  }
+}

@@ -3,31 +3,19 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"path"
-	"strings"
+
+	"github.com/theghostwhocodes/mocker-go/internal/contentmanagers"
 )
 
-func getContent(basePath string, r *http.Request) ([]byte, error) {
-	method := r.Method
-	fileName := fmt.Sprintf("%s.%s.json", r.URL.Path[1:], strings.ToUpper(method))
-	content, err := ioutil.ReadFile(
-		path.Join(
-			basePath,
-			fileName,
-		),
-	)
-	return content, err
-}
-
-func isValidJSON(content []byte) bool {
+func getMapFromBytes(content []byte) map[string]interface{} {
 	var result map[string]interface{}
-	return json.Unmarshal(content, &result) == nil
+	json.Unmarshal(content, &result)
+	return result
 }
 
-func sendErrorMessage(message string, w http.ResponseWriter) {
+func sendErrorMessage(w http.ResponseWriter, message string) {
 	errorMessage := fmt.Sprintf("{\n\t\"error\": \"%s\"\n}", message)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintln(w, errorMessage)
@@ -42,19 +30,20 @@ func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
 // HandlerFactory return a proper handler
 func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		content, err := getContent(basePath, r)
-		isValid := isValidJSON(content)
-
+		jsonMaps, err := contentmanagers.GetScannedMockContent(basePath, r)
 		if err != nil {
-			sendErrorMessage(err.Error(), w)
+			sendErrorMessage(w, err.Error())
 			return
 		}
 
-		if !isValid {
-			sendErrorMessage("The mock file contains invalid JSON", w)
+		if len(jsonMaps) < 1 {
+			w.WriteHeader(http.StatusNotFound)
 			return
 		}
 
-		manageSuccess(w, r, content)
+		jsonMap := jsonMaps[0]
+
+		body, _ := json.Marshal(jsonMap.Response.Body)
+		manageSuccess(w, r, body)
 	}
 }

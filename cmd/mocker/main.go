@@ -46,7 +46,6 @@ func main() {
 	basePath, _ := filepath.Abs(dataPath)
 
 	http.HandleFunc("/", handlers.HandlerFactory(basePath))
-
 	log.Printf("Loading data from %s", basePath)
 	log.Printf("Mocker listening on %s:%d...", host, port)
 
