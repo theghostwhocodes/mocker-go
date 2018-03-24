@@ -1,6 +1,7 @@
 package models
 
 import (
+	"net/http"
 	"net/url"
 )
 
@@ -9,7 +10,7 @@ type MockHTTPRequest struct {
 	Method  string
 	Params  url.Values
 	Payload url.Values
-	Headers map[string][]string
+	Headers http.Header
 }
 
 // MockHTTPResponse is the struct for the reponse part of the mock content
