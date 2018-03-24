@@ -36,7 +36,7 @@ func FilterMockHTTPMethod(mocks []models.MockHTTP, method string) (results []mod
 	return results, nil
 }
 
-// FilterMockHeaderContent filters mock by HTTP headers content
+// FilterMockHeaderContent filters mocks by HTTP headers content
 func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (results []models.MockHTTP, err error) {
 	var emptyHeaderMatches []models.MockHTTP
 	var matches []models.MockHTTP
@@ -73,6 +73,7 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 	return emptyHeaderMatches, nil
 }
 
+// FilterMockPayloadContent filters mocks by HTTP payload content
 func FilterMockPayloadContent(mocks []models.MockHTTP, payload interface{}) (results []models.MockHTTP, err error) {
 	var emptyMatches []models.MockHTTP
 	var matches []models.MockHTTP
@@ -96,6 +97,7 @@ func FilterMockPayloadContent(mocks []models.MockHTTP, payload interface{}) (res
 	return emptyMatches, nil
 }
 
+// FilterMockParamsContent filters mocks by HTTP query parameters content
 func FilterMockParamsContent(mocks []models.MockHTTP, params url.Values) (results []models.MockHTTP, err error) {
 	var emptyMatches []models.MockHTTP
 	var matches []models.MockHTTP
