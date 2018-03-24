@@ -7,7 +7,7 @@ import (
 // MockHTTPRequest is the struct for the request part of the mock content
 type MockHTTPRequest struct {
 	Method  string
-	Params  map[string]string
+	Params  url.Values
 	Payload url.Values
 	Headers map[string][]string
 }
