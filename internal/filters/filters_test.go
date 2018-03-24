@@ -376,11 +376,11 @@ func TestFilterMockPayloadContentNoMatch(t *testing.T) {
 	}
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
-	headers := map[string][]string{
+	payload := map[string][]string{
 		"Payload10": []string{"Value1", "Value2"},
 		"Payload20": []string{"Value3", "Value4"},
 	}
-	filtered, err := FilterMockPayloadContent(mocks, headers)
+	filtered, err := FilterMockPayloadContent(mocks, payload)
 
 	if err != nil {
 		t.Fail()
@@ -413,11 +413,11 @@ func TestFilterMockPayloadContentNoPayloadWithAMatch(t *testing.T) {
 	}
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
-	headers := map[string][]string{
+	payload := map[string][]string{
 		"Payload1": []string{"Value1", "Value2"},
 		"Payload2": []string{"Value3", "Value4"},
 	}
-	filtered, err := FilterMockPayloadContent(mocks, headers)
+	filtered, err := FilterMockPayloadContent(mocks, payload)
 
 	if err != nil {
 		t.Fail()
@@ -450,11 +450,11 @@ func TestFilterMockPayloadContentNoPayloadWithAMatch2(t *testing.T) {
 	}
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
-	headers := map[string][]string{
+	payload := map[string][]string{
 		"Payload5": []string{"Value1", "Value2"},
 		"Payload6": []string{"Value3", "Value4"},
 	}
-	filtered, err := FilterMockPayloadContent(mocks, headers)
+	filtered, err := FilterMockPayloadContent(mocks, payload)
 
 	if err != nil {
 		t.Fail()
