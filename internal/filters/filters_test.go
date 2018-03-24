@@ -625,3 +625,40 @@ func TestFilterMockParameterContentNoParameterWithAMatch(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestFilterMockParameterContentNoParameterWithAMatch2(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param3": []string{"Value5", "Value6"},
+				"Param4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	params := url.Values{
+		"Param5": []string{"Value1", "Value2"},
+		"Param6": []string{"Value3", "Value4"},
+	}
+	filtered, err := FilterMockParamsContent(mocks, params)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 1 {
+		t.Fail()
+	}
+}
