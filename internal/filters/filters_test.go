@@ -307,7 +307,7 @@ func TestFilterMockPayloadContentSimple(t *testing.T) {
 	}
 }
 
-func TestFilterMockHeaderContentDoublePayload(t *testing.T) {
+func TestFilterMockPayloadContentDoublePayload(t *testing.T) {
 	mockHTTP1 := models.MockHTTP{
 		Request: models.MockHTTPRequest{
 			Payload: map[string][]string{
