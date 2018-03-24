@@ -2,6 +2,7 @@ package filters
 
 import (
 	"net/http"
+	"net/url"
 	"reflect"
 
 	"github.com/theghostwhocodes/mocker-go/internal/models"
@@ -84,6 +85,29 @@ func FilterMockPayloadContent(mocks []models.MockHTTP, payload interface{}) (res
 		}
 
 		if reflect.DeepEqual(mockPayload, payload) {
+			matches = append(matches, mock)
+		}
+	}
+
+	if len(matches) > 0 {
+		return matches, nil
+	}
+
+	return emptyMatches, nil
+}
+
+func FilterMockParamsContent(mocks []models.MockHTTP, params url.Values) (results []models.MockHTTP, err error) {
+	var emptyMatches []models.MockHTTP
+	var matches []models.MockHTTP
+	for _, mock := range mocks {
+		mockParams := mock.Request.Params
+
+		if mockParams == nil {
+			emptyMatches = append(emptyMatches, mock)
+			continue
+		}
+
+		if reflect.DeepEqual(mockParams, params) {
 			matches = append(matches, mock)
 		}
 	}
