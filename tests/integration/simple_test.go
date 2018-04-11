@@ -1,7 +1,9 @@
 package integration_test
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -15,7 +17,7 @@ import (
 var ts *httptest.Server
 
 func TestMain(m *testing.M) {
-	basePath, _ := filepath.Abs(path.Join("..", "..", "test_data"))
+	basePath, _ := filepath.Abs(path.Join("..", "data"))
 	fmt.Printf("%v\n", basePath)
 	ts = httptest.NewServer(http.HandlerFunc(handlers.HandlerFactory(basePath)))
 	defer ts.Close()
@@ -23,12 +25,32 @@ func TestMain(m *testing.M) {
 }
 
 func TestSimpleHttpGet(t *testing.T) {
-	res, err := http.Get(ts.URL)
-
+	url := fmt.Sprintf("%s/simple", ts.URL)
+	res, err := http.Get(url)
 	if err != nil {
 		t.Fail()
 	}
 
-	fmt.Printf("%v\n", ts.URL)
-	fmt.Printf("%v\n", res)
+	if res.StatusCode != 200 {
+		t.Fail()
+	}
+
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		t.Fail()
+	}
+
+	var content interface{}
+	err = json.Unmarshal(body, &content)
+	if err != nil {
+		t.Fail()
+	}
+
+	value := content.(map[string]interface{})
+	if value["key"] != "simple.GET.json" {
+		t.Fail()
+	}
+
 }
