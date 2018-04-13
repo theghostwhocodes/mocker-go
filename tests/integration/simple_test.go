@@ -24,6 +24,8 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+// TestSimpleHttpGet tests a simple HTTP GET call using a stub file with HTTP
+// verb explicitly set in filename
 func TestSimpleHttpGet(t *testing.T) {
 	url := fmt.Sprintf("%s/simple", ts.URL)
 	res, err := http.Get(url)
@@ -52,5 +54,4 @@ func TestSimpleHttpGet(t *testing.T) {
 	if value["key"] != "simple.GET.json" {
 		t.Fail()
 	}
-
 }
