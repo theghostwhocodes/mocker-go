@@ -20,7 +20,7 @@ test_validators:
 	go test github.com/theghostwhocodes/mocker-go/internal/validators -v -coverprofile=cover.out
 
 test_e2e:
-	go test github.com/theghostwhocodes/mocker-go/tests/e2e/... -v -coverprofile=cover.out
+	go test github.com/theghostwhocodes/mocker-go/tests/e2e/... -coverprofile=cover.out
 
 cover-report:
 	go tool cover -html=cover.out
