@@ -51,6 +51,7 @@ func TestSimpleHttpGet(t *testing.T) {
 	}
 
 	value := content.(map[string]interface{})
+	fmt.Printf("%v", value)
 	if value["key"] != "simple.GET.json" {
 		t.Fail()
 	}

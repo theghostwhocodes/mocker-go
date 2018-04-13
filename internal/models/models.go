@@ -15,7 +15,7 @@ type MockHTTPRequest struct {
 
 // MockHTTPResponse is the struct for the reponse part of the mock content
 type MockHTTPResponse struct {
-	Headers map[string]string
+	Headers http.Header
 	Body    interface{}
 }
 
