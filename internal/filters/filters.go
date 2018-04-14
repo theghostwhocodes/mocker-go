@@ -104,12 +104,12 @@ func FilterMockParamsContent(mocks []models.MockHTTP, params url.Values) (result
 	for _, mock := range mocks {
 		mockParams := mock.Request.Params
 
-		if mockParams == nil {
-			emptyMatches = append(emptyMatches, mock)
-			continue
-		}
+		// if mockParams == nil {
+		// 	emptyMatches = append(emptyMatches, mock)
+		// 	continue
+		// }
 
-		if reflect.DeepEqual(mockParams, params) {
+		if reflect.DeepEqual(mockParams, params) || (len(mockParams) == 0 && len(params) == 0) {
 			matches = append(matches, mock)
 		}
 	}

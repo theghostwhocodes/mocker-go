@@ -505,6 +505,40 @@ func TestFilterMockParametersContentSimple(t *testing.T) {
 	}
 }
 
+func TestFilterMockParametersContentSimpleNoParameter(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param3": []string{"Value5", "Value6"},
+				"Param4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	var params url.Values
+	filtered, err := FilterMockParamsContent(mocks, params)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 1 {
+		t.Fail()
+	}
+}
+
 func TestFilterMockParametersContentDoubleParameter(t *testing.T) {
 	mockHTTP1 := models.MockHTTP{
 		Request: models.MockHTTPRequest{
@@ -550,10 +584,10 @@ func TestFilterMockParametersContentDoubleParameter(t *testing.T) {
 func TestFilterMockParameterContentNoMatch(t *testing.T) {
 	mockHTTP1 := models.MockHTTP{
 		Request: models.MockHTTPRequest{
-			Params: url.Values{
-				"Param1": []string{"Value1", "Value2"},
-				"Param2": []string{"Value3", "Value4"},
-			},
+			// Params: url.Values{
+			// 	"Param1": []string{"Value1", "Value2"},
+			// 	"Param2": []string{"Value3", "Value4"},
+			// },
 		},
 	}
 	mockHTTP2 := models.MockHTTP{
@@ -575,8 +609,8 @@ func TestFilterMockParameterContentNoMatch(t *testing.T) {
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
 	params := url.Values{
-		"Param10": []string{"Value1", "Value2"},
-		"Param20": []string{"Value3", "Value4"},
+		"Param1": []string{"Value10", "Value2"},
+		"Param2": []string{"Value3", "Value4"},
 	}
 	filtered, err := FilterMockParamsContent(mocks, params)
 
@@ -658,7 +692,7 @@ func TestFilterMockParameterContentNoParameterWithAMatch2(t *testing.T) {
 		t.Fail()
 	}
 
-	if len(filtered) != 1 {
+	if len(filtered) != 0 {
 		t.Fail()
 	}
 }

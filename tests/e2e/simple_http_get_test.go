@@ -51,7 +51,6 @@ func TestSimpleHttpGet(t *testing.T) {
 	}
 
 	value := content.(map[string]interface{})
-	fmt.Printf("%v", value)
 	if value["key"] != "simple.GET.json" {
 		t.Fail()
 	}
@@ -153,4 +152,20 @@ func TestSimpleHttpGetTwoParams(t *testing.T) {
 	if value["key"] != "simple.GET.twoparams.json" {
 		t.Fail()
 	}
+}
+
+// TestSimpleHttpGetOneParamTooMuch tests a simple HTTP GET call using a stub file with HTTP
+// verb explicitly set in filename and one parameter in excess
+func TestSimpleHttpGetOneParamTooMuch(t *testing.T) {
+	url := fmt.Sprintf("%s/simple?param1=value1&param3=value3", ts.URL)
+	res, err := http.Get(url)
+	if err != nil {
+		t.FailNow()
+	}
+
+	if res.StatusCode != 404 {
+		t.FailNow()
+	}
+
+	defer res.Body.Close()
 }
