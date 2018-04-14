@@ -169,3 +169,19 @@ func TestSimpleHttpGetOneParamTooMuch(t *testing.T) {
 
 	defer res.Body.Close()
 }
+
+// TestSimpleHttpGetOneParamTooMuch tests a simple HTTP GET call using a stub file with HTTP
+// verb explicitly set in filename and one parameter in excess
+func TestSimpleHttpGetOneParamTooMuch2(t *testing.T) {
+	url := fmt.Sprintf("%s/simple?param3=value3", ts.URL)
+	res, err := http.Get(url)
+	if err != nil {
+		t.FailNow()
+	}
+
+	if res.StatusCode != 404 {
+		t.FailNow()
+	}
+
+	defer res.Body.Close()
+}
