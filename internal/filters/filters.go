@@ -70,11 +70,6 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 		return matches, nil
 	}
 
-	if len(emptyHeaderMatches) > 0 && len(headers) > 0 {
-		var empty []models.MockHTTP
-		return empty, nil
-	}
-
 	return emptyHeaderMatches, nil
 }
 
