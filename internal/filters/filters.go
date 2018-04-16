@@ -56,7 +56,7 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 				continue
 			}
 
-			if checkArrayEquality(values, headerValues) {
+			if reflect.DeepEqual(values, headerValues) {
 				matchCounter++
 			}
 		}
@@ -68,6 +68,11 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 
 	if len(matches) > 0 {
 		return matches, nil
+	}
+
+	if len(emptyHeaderMatches) > 0 && len(headers) > 0 {
+		var empty []models.MockHTTP
+		return empty, nil
 	}
 
 	return emptyHeaderMatches, nil
