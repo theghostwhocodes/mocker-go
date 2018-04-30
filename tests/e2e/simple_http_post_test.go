@@ -151,3 +151,23 @@ func TestSimpleHttpPostTwoParams(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestSimpleHttpPostOneParamTooMuch(t *testing.T) {
+	urlString := fmt.Sprintf("%s/simple", ts.URL)
+	form := url.Values{
+		"param1": {"value1"},
+		"param3": {"value3"},
+	}
+	postBody := bytes.NewBufferString(form.Encode())
+	res, err := http.Post(urlString, "application/x-www-form-urlencoded", postBody)
+	if err != nil {
+		fmt.Printf("Errore %v", err)
+		t.FailNow()
+	}
+
+	if res.StatusCode != 404 {
+		t.FailNow()
+	}
+
+	defer res.Body.Close()
+}
