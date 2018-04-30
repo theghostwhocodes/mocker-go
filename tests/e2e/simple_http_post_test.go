@@ -161,7 +161,6 @@ func TestSimpleHttpPostOneParamTooMuch(t *testing.T) {
 	postBody := bytes.NewBufferString(form.Encode())
 	res, err := http.Post(urlString, "application/x-www-form-urlencoded", postBody)
 	if err != nil {
-		fmt.Printf("Errore %v", err)
 		t.FailNow()
 	}
 
@@ -180,7 +179,22 @@ func TestSimpleHttpPostOneParamTooMuch2(t *testing.T) {
 	postBody := bytes.NewBufferString(form.Encode())
 	res, err := http.Post(urlString, "application/x-www-form-urlencoded", postBody)
 	if err != nil {
-		fmt.Printf("Errore %v", err)
+		t.FailNow()
+	}
+
+	if res.StatusCode != 404 {
+		t.FailNow()
+	}
+
+	defer res.Body.Close()
+}
+
+func TestSimpleHttpPostSimpleNotFound(t *testing.T) {
+	urlString := fmt.Sprintf("%s/simpleNotFound", ts.URL)
+	form := url.Values{}
+	postBody := bytes.NewBufferString(form.Encode())
+	res, err := http.Post(urlString, "application/x-www-form-urlencoded", postBody)
+	if err != nil {
 		t.FailNow()
 	}
 
