@@ -74,18 +74,18 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 }
 
 // FilterMockPayloadContent filters mocks by HTTP payload content
-func FilterMockPayloadContent(mocks []models.MockHTTP, payload interface{}) (results []models.MockHTTP, err error) {
+func FilterMockPayloadContent(mocks []models.MockHTTP, payload url.Values) (results []models.MockHTTP, err error) {
 	var emptyMatches []models.MockHTTP
 	var matches []models.MockHTTP
 	for _, mock := range mocks {
 		mockPayload := mock.Request.Payload
 
-		if mockPayload == nil {
-			emptyMatches = append(emptyMatches, mock)
-			continue
-		}
+		// if mockPayload == nil {
+		// 	emptyMatches = append(emptyMatches, mock)
+		// 	continue
+		// }
 
-		if reflect.DeepEqual(mockPayload, payload) {
+		if reflect.DeepEqual(mockPayload, payload) || (len(mockPayload) == 0 && len(payload) == 0) {
 			matches = append(matches, mock)
 		}
 	}
