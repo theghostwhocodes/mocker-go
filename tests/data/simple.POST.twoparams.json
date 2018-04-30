@@ -1,0 +1,17 @@
+{
+    "request": {
+        "method": "POST",
+        "payload": {
+            "param1": ["value1"],
+            "param2": ["value2"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.POST.twoparams.json"
+        }
+    }
+}

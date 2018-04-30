@@ -113,3 +113,41 @@ func TestSimpleHttpPostOneParam(t *testing.T) {
 		t.Fail()
 	}
 }
+
+// TestSimpleHttpPostTwoParams tests a simple HTTP POST call using a stub file with HTTP
+// verb explicitly set in filename and two parameters in stub content
+func TestSimpleHttpPostTwoParams(t *testing.T) {
+	urlString := fmt.Sprintf("%s/simple", ts.URL)
+	form := url.Values{
+		"param1": {"value1"},
+		"param2": {"value2"},
+	}
+	postBody := bytes.NewBufferString(form.Encode())
+	res, err := http.Post(urlString, "application/x-www-form-urlencoded", postBody)
+	if err != nil {
+		t.Fail()
+	}
+
+	if res.StatusCode != 200 {
+		t.Fail()
+	}
+
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		t.Fail()
+	}
+
+	var content interface{}
+	err = json.Unmarshal(body, &content)
+	if err != nil {
+		t.Fail()
+	}
+
+	value := content.(map[string]interface{})
+	fmt.Printf("%v", value)
+	if value["key"] != "simple.POST.twoparams.json" {
+		t.Fail()
+	}
+}
