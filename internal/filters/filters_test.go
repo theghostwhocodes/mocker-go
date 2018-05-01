@@ -460,7 +460,7 @@ func TestFilterMockPayloadContentNoPayloadWithAMatch2(t *testing.T) {
 		t.Fail()
 	}
 
-	if len(filtered) != 1 {
+	if len(filtered) != 0 {
 		t.Fail()
 	}
 }
