@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"path/filepath"
+	"syscall"
 
 	"github.com/theghostwhocodes/mocker-go/internal/handlers"
 )
@@ -35,6 +38,10 @@ func init() {
 	flag.StringVar(&host, "host", hostDefault, hostHelpText)
 }
 
+func cleanup() {
+	fmt.Printf("Exiting mocker...\n")
+}
+
 func main() {
 	flag.Parse()
 
@@ -48,6 +55,14 @@ func main() {
 	http.HandleFunc("/", handlers.HandlerFactory(basePath))
 	log.Printf("Loading data from %s", basePath)
 	log.Printf("Mocker listening on %s:%d...", host, port)
+
+	c := make(chan os.Signal, 2)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		cleanup()
+		os.Exit(1)
+	}()
 
 	address := fmt.Sprintf("%s:%d", host, port)
 	http.ListenAndServe(address, nil)

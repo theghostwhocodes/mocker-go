@@ -1,0 +1,16 @@
+{
+    "request": {
+        "method": "GET",
+        "headers": {
+            "X-Custom-Header": ["Custom header"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.GET.singleheader.json"
+        }
+    }
+}

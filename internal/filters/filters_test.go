@@ -307,7 +307,7 @@ func TestFilterMockPayloadContentSimple(t *testing.T) {
 	}
 }
 
-func TestFilterMockHeaderContentDoublePayload(t *testing.T) {
+func TestFilterMockPayloadContentDoublePayload(t *testing.T) {
 	mockHTTP1 := models.MockHTTP{
 		Request: models.MockHTTPRequest{
 			Payload: map[string][]string{
@@ -376,11 +376,11 @@ func TestFilterMockPayloadContentNoMatch(t *testing.T) {
 	}
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
-	headers := map[string][]string{
+	payload := map[string][]string{
 		"Payload10": []string{"Value1", "Value2"},
 		"Payload20": []string{"Value3", "Value4"},
 	}
-	filtered, err := FilterMockPayloadContent(mocks, headers)
+	filtered, err := FilterMockPayloadContent(mocks, payload)
 
 	if err != nil {
 		t.Fail()
@@ -413,11 +413,11 @@ func TestFilterMockPayloadContentNoPayloadWithAMatch(t *testing.T) {
 	}
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
-	headers := map[string][]string{
+	payload := map[string][]string{
 		"Payload1": []string{"Value1", "Value2"},
 		"Payload2": []string{"Value3", "Value4"},
 	}
-	filtered, err := FilterMockPayloadContent(mocks, headers)
+	filtered, err := FilterMockPayloadContent(mocks, payload)
 
 	if err != nil {
 		t.Fail()
@@ -450,17 +450,249 @@ func TestFilterMockPayloadContentNoPayloadWithAMatch2(t *testing.T) {
 	}
 
 	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
-	headers := map[string][]string{
+	payload := map[string][]string{
 		"Payload5": []string{"Value1", "Value2"},
 		"Payload6": []string{"Value3", "Value4"},
 	}
-	filtered, err := FilterMockPayloadContent(mocks, headers)
+	filtered, err := FilterMockPayloadContent(mocks, payload)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 0 {
+		t.Fail()
+	}
+}
+
+func TestFilterMockParametersContentSimple(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+			},
+		},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param3": []string{"Value5", "Value6"},
+				"Param4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	params := url.Values{
+		"Param1": []string{"Value1", "Value2"},
+	}
+	filtered, err := FilterMockParamsContent(mocks, params)
 
 	if err != nil {
 		t.Fail()
 	}
 
 	if len(filtered) != 1 {
+		t.Fail()
+	}
+}
+
+func TestFilterMockParametersContentSimpleNoParameter(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param3": []string{"Value5", "Value6"},
+				"Param4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	var params url.Values
+	filtered, err := FilterMockParamsContent(mocks, params)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 1 {
+		t.Fail()
+	}
+}
+
+func TestFilterMockParametersContentDoubleParameter(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param3": []string{"Value5", "Value6"},
+				"Param4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	params := url.Values{
+		"Param1": []string{"Value1", "Value2"},
+		"Param2": []string{"Value3", "Value4"},
+	}
+	filtered, err := FilterMockParamsContent(mocks, params)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 2 {
+		t.Fail()
+	}
+}
+
+func TestFilterMockParameterContentNoMatch(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			// Params: url.Values{
+			// 	"Param1": []string{"Value1", "Value2"},
+			// 	"Param2": []string{"Value3", "Value4"},
+			// },
+		},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param3": []string{"Value5", "Value6"},
+				"Param4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	params := url.Values{
+		"Param1": []string{"Value10", "Value2"},
+		"Param2": []string{"Value3", "Value4"},
+	}
+	filtered, err := FilterMockParamsContent(mocks, params)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 0 {
+		t.Fail()
+	}
+}
+
+func TestFilterMockParameterContentNoParameterWithAMatch(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param3": []string{"Value5", "Value6"},
+				"Param4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	params := url.Values{
+		"Param1": []string{"Value1", "Value2"},
+		"Param2": []string{"Value3", "Value4"},
+	}
+	filtered, err := FilterMockParamsContent(mocks, params)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 1 {
+		t.Fail()
+	}
+}
+
+func TestFilterMockParameterContentNoParameterWithAMatch2(t *testing.T) {
+	mockHTTP1 := models.MockHTTP{
+		Request: models.MockHTTPRequest{},
+	}
+	mockHTTP2 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param3": []string{"Value5", "Value6"},
+				"Param4": []string{"Value7", "Value8"},
+			},
+		},
+	}
+	mockHTTP3 := models.MockHTTP{
+		Request: models.MockHTTPRequest{
+			Params: url.Values{
+				"Param1": []string{"Value1", "Value2"},
+				"Param2": []string{"Value3", "Value4"},
+			},
+		},
+	}
+
+	mocks := []models.MockHTTP{mockHTTP1, mockHTTP2, mockHTTP3}
+	params := url.Values{
+		"Param5": []string{"Value1", "Value2"},
+		"Param6": []string{"Value3", "Value4"},
+	}
+	filtered, err := FilterMockParamsContent(mocks, params)
+
+	if err != nil {
+		t.Fail()
+	}
+
+	if len(filtered) != 0 {
 		t.Fail()
 	}
 }

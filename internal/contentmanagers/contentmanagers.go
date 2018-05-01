@@ -96,6 +96,7 @@ func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []
 	filteredResults, err = filters.FilterMockHeaderContent(filteredResults, r.Header)
 	r.ParseMultipartForm((1 << 10) * 24)
 	filteredResults, err = filters.FilterMockPayloadContent(filteredResults, r.PostForm)
+	filteredResults, err = filters.FilterMockParamsContent(filteredResults, r.URL.Query())
 
 	if err != nil {
 		return filteredResults, err

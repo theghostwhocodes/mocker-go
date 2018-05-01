@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET"
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.GET.json"
+        }
+    }
+}

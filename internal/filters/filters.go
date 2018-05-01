@@ -2,6 +2,7 @@ package filters
 
 import (
 	"net/http"
+	"net/url"
 	"reflect"
 
 	"github.com/theghostwhocodes/mocker-go/internal/models"
@@ -35,7 +36,7 @@ func FilterMockHTTPMethod(mocks []models.MockHTTP, method string) (results []mod
 	return results, nil
 }
 
-// FilterMockHeaderContent filters mock by HTTP headers content
+// FilterMockHeaderContent filters mocks by HTTP headers content
 func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (results []models.MockHTTP, err error) {
 	var emptyHeaderMatches []models.MockHTTP
 	var matches []models.MockHTTP
@@ -55,7 +56,7 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 				continue
 			}
 
-			if checkArrayEquality(values, headerValues) {
+			if reflect.DeepEqual(values, headerValues) {
 				matchCounter++
 			}
 		}
@@ -72,18 +73,43 @@ func FilterMockHeaderContent(mocks []models.MockHTTP, headers http.Header) (resu
 	return emptyHeaderMatches, nil
 }
 
-func FilterMockPayloadContent(mocks []models.MockHTTP, payload interface{}) (results []models.MockHTTP, err error) {
+// FilterMockPayloadContent filters mocks by HTTP payload content
+func FilterMockPayloadContent(mocks []models.MockHTTP, payload url.Values) (results []models.MockHTTP, err error) {
 	var emptyMatches []models.MockHTTP
 	var matches []models.MockHTTP
 	for _, mock := range mocks {
 		mockPayload := mock.Request.Payload
 
-		if mockPayload == nil {
-			emptyMatches = append(emptyMatches, mock)
-			continue
-		}
+		// if mockPayload == nil {
+		// 	emptyMatches = append(emptyMatches, mock)
+		// 	continue
+		// }
 
-		if reflect.DeepEqual(mockPayload, payload) {
+		if reflect.DeepEqual(mockPayload, payload) || (len(mockPayload) == 0 && len(payload) == 0) {
+			matches = append(matches, mock)
+		}
+	}
+
+	if len(matches) > 0 {
+		return matches, nil
+	}
+
+	return emptyMatches, nil
+}
+
+// FilterMockParamsContent filters mocks by HTTP query parameters content
+func FilterMockParamsContent(mocks []models.MockHTTP, params url.Values) (results []models.MockHTTP, err error) {
+	var emptyMatches []models.MockHTTP
+	var matches []models.MockHTTP
+	for _, mock := range mocks {
+		mockParams := mock.Request.Params
+
+		// if mockParams == nil {
+		// 	emptyMatches = append(emptyMatches, mock)
+		// 	continue
+		// }
+
+		if reflect.DeepEqual(mockParams, params) || (len(mockParams) == 0 && len(params) == 0) {
 			matches = append(matches, mock)
 		}
 	}

@@ -1,0 +1,16 @@
+{
+    "request": {
+        "method": "GET",
+        "params": {
+            "param1": ["value1"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.GET.param.json"
+        }
+    }
+}
