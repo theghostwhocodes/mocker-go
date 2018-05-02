@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "PUT"
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simplePUT.HTTP.json"
+        }
+    }
+}
