@@ -226,3 +226,24 @@ func TestSimpleHttpPutOneParamTooMuch2(t *testing.T) {
 
 	defer res.Body.Close()
 }
+
+func TestSimpleHttpPutSimpleNotFound(t *testing.T) {
+	urlString := fmt.Sprintf("%s/simpleNotFound", ts.URL)
+	client := &http.Client{}
+	req, err := http.NewRequest("PUT", urlString, nil)
+	if err != nil {
+		t.Fail()
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	res, err := client.Do(req)
+
+	if err != nil {
+		t.FailNow()
+	}
+
+	if res.StatusCode != 404 {
+		t.FailNow()
+	}
+
+	defer res.Body.Close()
+}
