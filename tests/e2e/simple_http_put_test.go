@@ -201,3 +201,28 @@ func TestSimpleHttpPutOneParamTooMuch(t *testing.T) {
 
 	defer res.Body.Close()
 }
+
+func TestSimpleHttpPutOneParamTooMuch2(t *testing.T) {
+	urlString := fmt.Sprintf("%s/simple", ts.URL)
+	form := url.Values{
+		"param3": {"value3"},
+	}
+	postBody := bytes.NewBufferString(form.Encode())
+	client := &http.Client{}
+	req, err := http.NewRequest("PUT", urlString, postBody)
+	if err != nil {
+		t.Fail()
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	res, err := client.Do(req)
+
+	if err != nil {
+		t.FailNow()
+	}
+
+	if res.StatusCode != 404 {
+		t.FailNow()
+	}
+
+	defer res.Body.Close()
+}
