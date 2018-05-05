@@ -28,7 +28,7 @@ func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
 }
 
 // HandlerFactory return a proper handler
-func HandlerFactory(basePath string) func(w http.ResponseWriter, r *http.Request) {
+func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		jsonMaps, err := contentmanagers.GetScannedMockContent(basePath, r)
 		if err != nil {

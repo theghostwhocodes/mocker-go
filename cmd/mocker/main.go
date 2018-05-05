@@ -18,6 +18,7 @@ var showVersion bool
 var dataPath string
 var port int
 var host string
+var proxyFor string
 
 func init() {
 	const (
@@ -27,6 +28,8 @@ func init() {
 		portHelpText     = "The TCP port to listen"
 		hostDefault      = "127.0.0.1"
 		hostHelpText     = "The host to listen"
+		proxyForDefault  = ""
+		proxyForHelpText = "The real API endpoint"
 	)
 
 	flag.BoolVar(&showVersion, "version", false, "Mocker version")
@@ -36,6 +39,8 @@ func init() {
 	flag.IntVar(&port, "port", portDefault, portHelpText)
 	flag.StringVar(&host, "h", hostDefault, hostHelpText+" (shorthand)")
 	flag.StringVar(&host, "host", hostDefault, hostHelpText)
+	flag.StringVar(&proxyFor, "pf", proxyForDefault, proxyForHelpText+" (shorthand)")
+	flag.StringVar(&proxyFor, "proxy-for", proxyForDefault, proxyForHelpText)
 }
 
 func cleanup() {
@@ -52,9 +57,13 @@ func main() {
 
 	basePath, _ := filepath.Abs(dataPath)
 
-	http.HandleFunc("/", handlers.HandlerFactory(basePath))
+	http.HandleFunc("/", handlers.HandlerFactory(basePath, proxyFor))
 	log.Printf("Loading data from %s", basePath)
 	log.Printf("Mocker listening on %s:%d...", host, port)
+
+	if proxyFor != "" {
+		log.Printf("Mocker acting as a proxy for %s...", proxyFor)
+	}
 
 	c := make(chan os.Signal, 2)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
