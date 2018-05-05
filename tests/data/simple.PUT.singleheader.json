@@ -1,0 +1,16 @@
+{
+    "request": {
+        "method": "PUT",
+        "headers": {
+            "X-Custom-Header": ["Custom header"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.PUT.singleheader.json"
+        }
+    }
+}
