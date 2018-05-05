@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -115,4 +116,32 @@ func GetBodyContent(jsonMap map[string]interface{}) ([]byte, error) {
 	}
 	bodyBytes, error := json.Marshal(body)
 	return bodyBytes, error
+}
+
+// ProxyFor manages proxy for
+func ProxyFor(r *http.Request, proxyFor string) (response *http.Response, err error) {
+	urlPath := r.URL.Path[1:]
+	url := fmt.Sprintf("%s/%s", proxyFor, urlPath)
+	httpVerb := r.Method
+	httpHeaders := r.Header
+	httpBody := r.Body
+
+	log.Printf("Calling %s using verb %s...\n", url, httpVerb)
+
+	client := &http.Client{}
+	req, err := http.NewRequest(httpVerb, url, httpBody)
+	if err != nil {
+		return nil, err
+	}
+
+	for key, value := range httpHeaders {
+		req.Header.Add(key, value[0])
+	}
+
+	response, err = client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }

@@ -36,32 +36,13 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 		var err error
 
 		if proxyFor != "" {
-			fmt.Printf("ProxyFor\n")
-			urlPath := r.URL.Path[1:]
-			url := fmt.Sprintf("%s/%s", proxyFor, urlPath)
-			httpVerb := r.Method
-			httpHeaders := r.Header
-			httpBody := r.Body
-			fmt.Printf("Calling %s using verb %s...\n", url, httpVerb)
-			// fmt.Printf("Headers %v\n", httpHeaders)
-			// fmt.Printf("Body %v", httpBody)
-			client := &http.Client{}
-			req, err := http.NewRequest(httpVerb, url, httpBody)
-			if err != nil {
-				sendErrorMessage(w, err.Error())
-				return
-			}
-			for key, value := range httpHeaders {
-				req.Header.Add(key, value[0])
-			}
-			res, err = client.Do(req)
-			fmt.Printf("A Response status code %d\n", res.StatusCode)
+			res, err = contentmanagers.ProxyFor(r, proxyFor)
 			if err != nil {
 				sendErrorMessage(w, err.Error())
 				return
 			}
 
-			body, err = ioutil.ReadAll(res.Body)
+			body, err := ioutil.ReadAll(response.Body)
 			if err != nil {
 				sendErrorMessage(w, err.Error())
 				return
