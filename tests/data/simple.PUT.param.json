@@ -1,0 +1,16 @@
+{
+    "request": {
+        "method": "PUT",
+        "payload": {
+            "param1": ["value1"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.PUT.param.json"
+        }
+    }
+}
