@@ -42,7 +42,7 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 				return
 			}
 
-			body, err := ioutil.ReadAll(response.Body)
+			body, err = ioutil.ReadAll(res.Body)
 			if err != nil {
 				sendErrorMessage(w, err.Error())
 				return
