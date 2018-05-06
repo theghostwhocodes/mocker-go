@@ -47,6 +47,7 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 				sendErrorMessage(w, err.Error())
 				return
 			}
+			w.Header().Set("Mocker-Proxy", "true")
 		}
 
 		fmt.Printf("Response status code %d\n", res.StatusCode)
@@ -68,6 +69,7 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 			body, _ = json.Marshal(jsonMap.Response.Body)
 		}
 
+		w.Header().Set("Mocker-Stubbed", "true")
 		manageSuccess(w, r, body)
 	}
 }
