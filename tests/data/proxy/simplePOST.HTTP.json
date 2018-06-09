@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "POST"
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "proxy simplePOST.HTTP.json"
+        }
+    }
+}
