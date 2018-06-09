@@ -1,6 +1,7 @@
 package contentmanagers
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -126,12 +127,13 @@ func ProxyFor(r *http.Request, proxyFor string) (response *http.Response, err er
 	url := fmt.Sprintf("%s/%s", proxyFor, urlPath)
 	httpVerb := r.Method
 	httpHeaders := r.Header
-	httpBody := r.Body
+	httpBody, err := ioutil.ReadAll(r.Body)
+	r.Body = ioutil.NopCloser(bytes.NewBuffer(httpBody))
 
 	log.Printf("Calling %s using verb %s...\n", url, httpVerb)
 
 	client := &http.Client{}
-	req, err := http.NewRequest(httpVerb, url, httpBody)
+	req, err := http.NewRequest(httpVerb, url, bytes.NewReader(httpBody))
 	if err != nil {
 		return nil, err
 	}
