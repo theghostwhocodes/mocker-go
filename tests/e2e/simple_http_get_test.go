@@ -17,9 +17,9 @@ import (
 var ts *httptest.Server
 
 func TestMain(m *testing.M) {
-	basePath, _ := filepath.Abs(path.Join("..", "data"))
+	basePath, _ := filepath.Abs(path.Join("..", "data", "main"))
 	fmt.Printf("%v\n", basePath)
-	ts = httptest.NewServer(http.HandlerFunc(handlers.HandlerFactory(basePath)))
+	ts = httptest.NewServer(http.HandlerFunc(handlers.HandlerFactory(basePath, "")))
 	defer ts.Close()
 	os.Exit(m.Run())
 }

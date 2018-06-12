@@ -1,0 +1,17 @@
+{
+    "request": {
+        "method": "GET",
+        "headers": {
+            "X-Custom-Header": ["Custom header"],
+            "X-Custom-Header-2": ["Custom header 2"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "proxy simple.GET.doubleheader.json"
+        }
+    }
+}
