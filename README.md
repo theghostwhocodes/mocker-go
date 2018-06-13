@@ -3,7 +3,9 @@ A simple HTTP mock server inspired by Saray
 
 ## How to use
 
-The HTTP responses of this mocker are builderd based on a filesystem hierarchy of JSON files.
+The HTTP responses of this mocker are builded based on a filesystem hierarchy of JSON files.
+
+The filenames of your mocks are very important, because it determines when and how the mocks will be loaded.
 The final part of your URL and the HTTP method define the name of the JSON file that Mocker will read to respond to your test requests.
 
 Here is an example.

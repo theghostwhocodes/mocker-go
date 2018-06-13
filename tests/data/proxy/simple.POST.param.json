@@ -1,0 +1,16 @@
+{
+    "request": {
+        "method": "POST",
+        "payload": {
+            "param1": ["value1"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "proxy simple.POST.param.json"
+        }
+    }
+}

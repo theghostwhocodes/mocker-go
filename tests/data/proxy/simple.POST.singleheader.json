@@ -1,0 +1,16 @@
+{
+    "request": {
+        "method": "POST",
+        "headers": {
+            "X-Custom-Header": ["Custom header"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "proxy simple.POST.singleheader.json"
+        }
+    }
+}

@@ -1,10 +1,12 @@
 package contentmanagers
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -95,6 +97,8 @@ func GetScannedMockContent(basePath string, r *http.Request) (filteredResults []
 	filteredResults, err = filters.FilterMockHTTPMethod(results, r.Method)
 	filteredResults, err = filters.FilterMockHeaderContent(filteredResults, r.Header)
 	r.ParseMultipartForm((1 << 10) * 24)
+	fmt.Printf("Header %v\n", r.Header)
+	fmt.Printf("Postform %v\n", r.PostForm)
 	filteredResults, err = filters.FilterMockPayloadContent(filteredResults, r.PostForm)
 	filteredResults, err = filters.FilterMockParamsContent(filteredResults, r.URL.Query())
 
@@ -115,4 +119,33 @@ func GetBodyContent(jsonMap map[string]interface{}) ([]byte, error) {
 	}
 	bodyBytes, error := json.Marshal(body)
 	return bodyBytes, error
+}
+
+// ProxyFor manages proxy for
+func ProxyFor(r *http.Request, proxyFor string) (response *http.Response, err error) {
+	urlPath := r.URL.Path[1:]
+	url := fmt.Sprintf("%s/%s", proxyFor, urlPath)
+	httpVerb := r.Method
+	httpHeaders := r.Header
+	httpBody, err := ioutil.ReadAll(r.Body)
+	r.Body = ioutil.NopCloser(bytes.NewBuffer(httpBody))
+
+	log.Printf("Calling %s using verb %s...\n", url, httpVerb)
+
+	client := &http.Client{}
+	req, err := http.NewRequest(httpVerb, url, bytes.NewReader(httpBody))
+	if err != nil {
+		return nil, err
+	}
+
+	for key, value := range httpHeaders {
+		req.Header.Add(key, value[0])
+	}
+
+	response, err = client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
