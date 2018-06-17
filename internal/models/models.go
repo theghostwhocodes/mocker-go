@@ -17,6 +17,7 @@ type MockHTTPRequest struct {
 type MockHTTPResponse struct {
 	Headers http.Header
 	Body    interface{}
+	Status  int
 }
 
 // MockHTTP is the struct for the mock content
