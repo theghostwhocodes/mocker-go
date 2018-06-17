@@ -34,6 +34,7 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 		res := new(http.Response)
 		var body []byte
 		var err error
+		var httpStatusCode int
 
 		if proxyFor != "" {
 			res, err = contentmanagers.ProxyFor(r, proxyFor)
@@ -67,9 +68,11 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 			jsonMap := jsonMaps[0]
 
 			body, _ = json.Marshal(jsonMap.Response.Body)
+			httpStatusCode = jsonMap.Response.Status
 		}
 
 		w.Header().Set("Mocker-Stubbed", "true")
+		w.WriteHeader(httpStatusCode)
 		manageSuccess(w, r, body)
 	}
 }
