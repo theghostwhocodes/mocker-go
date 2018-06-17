@@ -70,6 +70,10 @@ func ScanMockFilesContent(basePath string, dirName string, fileNames []string) (
 			return nil, err
 		}
 
+		if jsonContent.Response.Status == 0 {
+			jsonContent.Response.Status = 200
+		}
+
 		results = append(results, jsonContent)
 	}
 
