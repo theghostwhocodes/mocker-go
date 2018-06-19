@@ -53,7 +53,6 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 			httpStatusCode = res.StatusCode
 		}
 
-		fmt.Printf("Response status code %d\n", res.StatusCode)
 		if res.StatusCode == 404 || res.StatusCode == 405 || err != nil || proxyFor == "" {
 			jsonMaps, err := contentmanagers.GetScannedMockContent(basePath, r)
 			if err != nil {
