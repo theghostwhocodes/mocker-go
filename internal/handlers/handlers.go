@@ -22,8 +22,9 @@ func sendErrorMessage(w http.ResponseWriter, message string) {
 	fmt.Fprintln(w, errorMessage)
 }
 
-func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte) {
+func manageSuccess(w http.ResponseWriter, r *http.Request, content []byte, status int) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(status)
 	fmt.Fprintln(w, string(content))
 	log.Printf("Serving %s\n", r.URL.Path[1:])
 }
@@ -52,7 +53,6 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 			httpStatusCode = res.StatusCode
 		}
 
-		fmt.Printf("Response status code %d\n", res.StatusCode)
 		if res.StatusCode == 404 || res.StatusCode == 405 || err != nil || proxyFor == "" {
 			jsonMaps, err := contentmanagers.GetScannedMockContent(basePath, r)
 			if err != nil {
@@ -72,7 +72,6 @@ func HandlerFactory(basePath string, proxyFor string) func(w http.ResponseWriter
 		}
 
 		w.Header().Set("Mocker-Stubbed", "true")
-		w.WriteHeader(httpStatusCode)
-		manageSuccess(w, r, body)
+		manageSuccess(w, r, body, httpStatusCode)
 	}
 }
