@@ -11,6 +11,7 @@ import (
 	"syscall"
 
 	"github.com/theghostwhocodes/mocker-go/internal/handlers"
+	"golang.org/x/sys/unix"
 )
 
 var version string
@@ -56,6 +57,12 @@ func main() {
 	}
 
 	basePath, _ := filepath.Abs(dataPath)
+
+	err := unix.Access(basePath, unix.R_OK+unix.W_OK)
+	if err != nil {
+		log.Printf("I can't access your data folder, please check folder permissions")
+		os.Exit(1)
+	}
 
 	http.HandleFunc("/", handlers.HandlerFactory(basePath, proxyFor))
 	log.Printf("Loading data from %s", basePath)
