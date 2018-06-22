@@ -74,5 +74,5 @@ func main() {
 	}()
 
 	address := fmt.Sprintf("%s:%d", host, port)
-	http.ListenAndServe(address, nil)
+	log.Fatal(http.ListenAndServe(address, nil))
 }
