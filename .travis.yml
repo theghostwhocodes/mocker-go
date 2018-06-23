@@ -8,6 +8,8 @@ env:
     - BUILD_GOOS=linux
     - BUILD_GOOS=darwin
     - BUILD_GOOS=windows
+install:
+    - go get golang.org/x/sys/unix
 script: if [ "${BUILD_GOOS}" == "linux" ]; then GOARCH=${BUILD_GOARCH} GOOS=${BUILD_GOOS} make test; fi;
 before_deploy:
   - GOARCH=${BUILD_GOARCH} GOOS=${BUILD_GOOS} go build -ldflags "-X main.version=${TRAVIS_TAG}" -o build/mocker cmd/mocker/main.go
