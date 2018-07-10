@@ -24,6 +24,13 @@ Here is the file naming convention explained:
 
 ![File naming convention](./docs/images/file_naming_convention.png)
 
+* **data path**: the root path used by mocker to read your data
+* **API path**: the path, relative to your data path, that mimic the url path of your mocked api
+* **resource**: the name of your resource, the final path of your url
+* **HTTP verb**: the HTTP verb of your mock
+* **optional part**: a filename optional part, needed to avoid file-system naming conflicts
+* **extension**: actually only JSON is supported
+
 ## Example
 
 For an HTTP GET:
