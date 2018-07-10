@@ -1,6 +1,11 @@
 # Mocker
 A simple HTTP mock server inspired by Saray
 
+## How to install
+
+Simply unpack the compressed file of a mocker distribution downloadable from
+https://github.com/theghostwhocodes/mocker-go/releases and you are ready to go!
+
 ## The idea behind Mocker
 
 Mocker is an HTTP server that transform a JSON file located in a file-system well defined path
