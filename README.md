@@ -17,7 +17,7 @@ The final part of your URL and the HTTP method define the name of the JSON file 
 
 Here is the file naming convention explained:
 
-![File naming convention]()./docs/images/file_naming_convention.png)
+![File naming convention](./docs/images/file_naming_convention.png)
 
 ## Example
 
