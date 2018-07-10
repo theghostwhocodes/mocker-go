@@ -38,6 +38,27 @@ For a parametrized HTTP GET:
 
 The same applies for the others HTTP methods.
 
-## How to run
+## Options and parameters
 
-`$ mocker -path ./yourdatafolder`
+```
+$ mocker --help
+Usage of build/mocker:
+  -d string
+    	The data path (shorthand) (default "./data")
+  -data string
+    	The data path (default "./data")
+  -h string
+    	The host to listen (shorthand) (default "127.0.0.1")
+  -host string
+    	The host to listen (default "127.0.0.1")
+  -p int
+    	The TCP port to listen (shorthand) (default 8000)
+  -pf string
+    	The real API endpoint (shorthand)
+  -port int
+    	The TCP port to listen (default 8000)
+  -proxy-for string
+    	The real API endpoint
+  -version
+    	Mocker version
+```
