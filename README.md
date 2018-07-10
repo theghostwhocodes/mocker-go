@@ -1,6 +1,13 @@
 # Mocker
 A simple HTTP mock server inspired by Saray
 
+## The idea behind Mocker
+
+Mocker is an HTTP server that transform a JSON file located in a file-system well defined path
+into an HTTP response.
+
+![The idea behind mocker](./docs/images/idea_behind.png)
+
 ## How to use
 
 The HTTP responses of this mocker are builded based on a filesystem hierarchy of JSON files.
