@@ -20,9 +20,9 @@ The HTTP responses of this mocker are builded based on a filesystem hierarchy of
 The filename of your mocks are very important, because it determines when and how the mocks will be loaded.
 The final part of your URL and the HTTP method define the name of the JSON file that Mocker will read to respond to your test requests.
 
-Here is the file naming convention explained:
-
 ![File naming convention](./docs/images/file_naming_convention.png)
+
+Here is the file naming convention explained:
 
 * **data path**: the root path used by mocker to read your data
 * **API path**: the path, relative to your data path, that mimic the url path of your mocked api
@@ -31,17 +31,66 @@ Here is the file naming convention explained:
 * **optional part**: a filename optional part, needed to avoid file-system naming conflicts
 * **extension**: actually only JSON is supported
 
-## Example
+## Examples
 
-For an HTTP GET:
+A simple HTTP GET mock:
+```json
+{
+    "request": {
+        "method": "GET"
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.GET.json"
+        }
+    }
+}
+```
 
-- test URL to map: HTTP GET to /mock/some/data
-- JSON file path: [root_path]/mock/some/data.GET.json
+An HTTP GET with a couple of parameters:
+```json
+{
+    "request": {
+        "method": "GET",
+        "params": {
+            "param1": ["value1"],
+            "param2": ["value2"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.GET.twoparams.json"
+        }
+    }
+}
+```
 
-For a parametrized HTTP GET:
-
-- test URL to map: HTTP GET to /mock/some/data?param1=value1&param2=value2
-- JSON file path: [root_path]/mock/some/data?param1=value1&param2=value2.GET.json
+An HTTP POST with two parameters:
+```json
+{
+    "request": {
+        "method": "POST",
+        "payload": {
+            "param1": ["value1"],
+            "param2": ["value2"]
+        }
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        },
+        "body": {
+            "key": "simple.POST.twoparams.json"
+        }
+    }
+}
+```
 
 The same applies for the others HTTP methods.
 
